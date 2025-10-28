@@ -1,31 +1,56 @@
 "use client";
 
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
-import { EmailInputPanel } from "@/components/email-input-panel";
-import { EmailPreviewPanel } from "@/components/email-preview-panel";
-import { EmailProvider } from "@/components/email-context";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { EmailProvider, useEmail } from "@/components/email-context";
+
+function EmailPanel() {
+  const { emailContent, setEmailContent } = useEmail();
+
+  return (
+    <div className="flex h-full flex-col overflow-hidden rounded-lg border p-4">
+      <Tabs defaultValue="code" className="flex h-full flex-col">
+        <TabsList>
+          <TabsTrigger value="code">Code</TabsTrigger>
+          <TabsTrigger value="apple-mail">Apple Mail</TabsTrigger>
+          <TabsTrigger value="gmail">Gmail</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="code" className="mt-4 flex-1 overflow-hidden">
+          <Textarea
+            placeholder="Paste your email HTML here..."
+            value={emailContent}
+            onChange={(e) => setEmailContent(e.target.value)}
+            className="h-full resize-none font-mono text-sm"
+          />
+        </TabsContent>
+
+        <TabsContent value="apple-mail" className="mt-4 flex-1 overflow-hidden">
+          <div className="h-full overflow-auto rounded-lg border bg-muted/30 p-4">
+            <div
+              className="wrap-break-word"
+              dangerouslySetInnerHTML={{ __html: emailContent }}
+            />
+          </div>
+        </TabsContent>
+
+        <TabsContent value="gmail" className="mt-4 flex-1 overflow-hidden">
+          <div className="h-full overflow-auto rounded-lg border bg-muted/30 p-4">
+            <div
+              className="wrap-break-word"
+              dangerouslySetInnerHTML={{ __html: emailContent }}
+            />
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
 
 export default function Home() {
   return (
     <EmailProvider>
-      <ResizablePanelGroup
-        direction="horizontal"
-        className="flex-1 rounded-lg border"
-      >
-        <ResizablePanel defaultSize={50} minSize={30}>
-          <EmailInputPanel />
-        </ResizablePanel>
-
-        <ResizableHandle withHandle />
-
-        <ResizablePanel defaultSize={50} minSize={30}>
-          <EmailPreviewPanel />
-        </ResizablePanel>
-      </ResizablePanelGroup>
+      <EmailPanel />
     </EmailProvider>
   );
 }
