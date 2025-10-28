@@ -157,6 +157,7 @@ Root layout sets up theming:
 - One component per file for UI components
 - Export component and any related types/variants
 - Use named exports for compound components
+- **Prefer smaller, focused components**: Break down complex UI into smaller, reusable components rather than building monolithic components. This improves maintainability, testability, and reusability
 
 ### Styling Classes
 
