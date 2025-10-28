@@ -12,6 +12,7 @@ function EmailPanel() {
       <Tabs defaultValue="code" className="flex h-full flex-col">
         <TabsList>
           <TabsTrigger value="code">Code</TabsTrigger>
+          <TabsTrigger value="plain-text">Plain Text</TabsTrigger>
           <TabsTrigger value="apple-mail">Apple Mail</TabsTrigger>
           <TabsTrigger value="gmail">Gmail</TabsTrigger>
         </TabsList>
@@ -23,6 +24,14 @@ function EmailPanel() {
             onChange={(e) => setEmailContent(e.target.value)}
             className="h-full resize-none font-mono text-sm"
           />
+        </TabsContent>
+
+        <TabsContent value="plain-text" className="mt-4 flex-1 overflow-hidden">
+          <div className="h-full overflow-auto rounded-lg border bg-muted/30 p-4">
+            <pre className="whitespace-pre-wrap font-sans text-sm">
+              {emailContent.replace(/<[^>]*>/g, "")}
+            </pre>
+          </div>
         </TabsContent>
 
         <TabsContent value="apple-mail" className="mt-4 flex-1 overflow-hidden">
