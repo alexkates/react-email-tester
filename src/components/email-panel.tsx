@@ -1,21 +1,59 @@
 "use client";
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CodeTab } from "@/components/code-tab";
-import { HtmlPreviewTab } from "@/components/html-preview-tab";
+import { useEffect, useState } from "react";
+import { useTheme } from "next-themes";
+import {
+  SandboxProvider,
+  SandboxLayout,
+  SandboxCodeEditor,
+  SandboxTabs,
+  SandboxTabsList,
+  SandboxTabsTrigger,
+  SandboxTabsContent,
+} from "@/components/ui/shadcn-io/sandbox";
+import { CodeIcon, AppWindowIcon } from "lucide-react";
+import { EmailPreview } from "@/components/email-preview";
+import { defaultEmailContent } from "@/lib/default-email";
 
 export function EmailPanel() {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-lg border p-4">
-      <Tabs defaultValue="code" className="flex h-full flex-col">
-        <TabsList>
-          <TabsTrigger value="code">Code</TabsTrigger>
-          <TabsTrigger value="preview">Preview</TabsTrigger>
-        </TabsList>
-
-        <CodeTab />
-        <HtmlPreviewTab value="preview" />
-      </Tabs>
+      <SandboxProvider
+        theme={theme === "dark" ? "dark" : "light"}
+        files={{
+          "/index.jsx": defaultEmailContent,
+        }}
+        options={{
+          activeFile: "/index.jsx",
+        }}
+      >
+        <SandboxLayout>
+          <SandboxTabs defaultValue="code">
+            <SandboxTabsList>
+              <SandboxTabsTrigger value="code">
+                <CodeIcon size={14} />
+                Code
+              </SandboxTabsTrigger>
+              <SandboxTabsTrigger value="preview">
+                <AppWindowIcon size={14} />
+                Preview
+              </SandboxTabsTrigger>
+            </SandboxTabsList>
+            <SandboxTabsContent className="overflow-hidden" value="code">
+              <SandboxCodeEditor showLineNumbers style={{ height: "100%" }} />
+            </SandboxTabsContent>
+            <SandboxTabsContent className="overflow-hidden" value="preview">
+              <EmailPreview />
+            </SandboxTabsContent>
+          </SandboxTabs>
+        </SandboxLayout>
+      </SandboxProvider>
     </div>
   );
 }
