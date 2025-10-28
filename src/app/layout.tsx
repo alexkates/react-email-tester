@@ -35,7 +35,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex min-h-screen flex-col">
+          <div className="flex h-screen flex-col overflow-hidden">
             <header>
               <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
                 <div className="flex items-center gap-6">
@@ -45,7 +45,7 @@ export default function RootLayout({
               </div>
             </header>
 
-            <main className="container mx-auto flex-1 max-w-7xl px-4 py-6">
+            <main className="container mx-auto flex flex-1 flex-col max-w-7xl overflow-hidden px-4 py-6">
               {children}
             </main>
 
