@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +35,28 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <div className="flex min-h-screen flex-col">
+            <header>
+              <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+                <div className="flex items-center gap-6">
+                  <h1 className="text-xl font-semibold">React Email Preview</h1>
+                </div>
+                <ModeToggle />
+              </div>
+            </header>
+
+            <main className="container mx-auto flex-1 max-w-7xl px-4 py-6">
+              {children}
+            </main>
+
+            <footer>
+              <div className="container mx-auto flex h-16 max-w-7xl items-center justify-center px-4">
+                <p className="text-sm text-muted-foreground">
+                  Built with Next.js and shadcn/ui
+                </p>
+              </div>
+            </footer>
+          </div>
         </ThemeProvider>
       </body>
     </html>
