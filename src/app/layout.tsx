@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
-import { ModeToggle } from "@/components/mode-toggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,7 +40,6 @@ export default function RootLayout({
                 <div className="flex items-center gap-6">
                   <h1 className="text-xl font-semibold">React Email Preview</h1>
                 </div>
-                <ModeToggle />
               </div>
             </header>
 
@@ -52,7 +50,33 @@ export default function RootLayout({
             <footer>
               <div className="container mx-auto flex h-16 max-w-7xl items-center justify-center px-4">
                 <p className="text-sm text-muted-foreground">
-                  Built with Next.js and shadcn/ui
+                  Built with{" "}
+                  <a
+                    href="https://nextjs.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-4 hover:text-foreground transition-colors"
+                  >
+                    Next.js
+                  </a>
+                  ,{" "}
+                  <a
+                    href="https://ui.shadcn.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-4 hover:text-foreground transition-colors"
+                  >
+                    shadcn/ui
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href="https://react.email"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-4 hover:text-foreground transition-colors"
+                  >
+                    react-email
+                  </a>
                 </p>
               </div>
             </footer>

@@ -10,6 +10,7 @@ type EmailPreviewContextValue = {
   isCompiling: boolean;
   compiledHtml: string;
   compile: () => Promise<void>;
+  onCompileComplete?: () => void;
 };
 
 const EmailPreviewContext = createContext<EmailPreviewContextValue | undefined>(
@@ -28,8 +29,10 @@ export const useEmailPreview = () => {
 
 export function EmailPreviewProvider({
   children,
+  onCompileComplete,
 }: {
   children: React.ReactNode;
+  onCompileComplete?: () => void;
 }) {
   const { sandpack } = useSandpack();
   const [compiledHtml, setCompiledHtml] = useState<string>("");
@@ -41,11 +44,12 @@ export function EmailPreviewProvider({
     const html = await compileEmail(emailContent);
     setCompiledHtml(html);
     setIsCompiling(false);
-  }, [sandpack.files]);
+    onCompileComplete?.();
+  }, [sandpack.files, onCompileComplete]);
 
   return (
     <EmailPreviewContext.Provider
-      value={{ isCompiling, compiledHtml, compile }}
+      value={{ isCompiling, compiledHtml, compile, onCompileComplete }}
     >
       {children}
     </EmailPreviewContext.Provider>

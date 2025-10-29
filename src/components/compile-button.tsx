@@ -9,12 +9,7 @@ export function CompileButton() {
   const { isCompiling, compile } = useEmailPreview();
 
   return (
-    <Button
-      size="sm"
-      onClick={compile}
-      disabled={isCompiling}
-      className="ml-auto"
-    >
+    <Button size="sm" onClick={compile} disabled={isCompiling}>
       {isCompiling ? (
         <>
           <Spinner className="size-4" />
