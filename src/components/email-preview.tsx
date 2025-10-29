@@ -1,16 +1,9 @@
 "use client";
 
-import { useSandpack } from "@codesandbox/sandpack-react";
-
-function compileEmail(code: string): string {
-  // TODO: Add custom compilation logic here
-  return code;
-}
+import { useEmailPreview } from "@/contexts/email-preview-context";
 
 export function EmailPreview() {
-  const { sandpack } = useSandpack();
-  const emailContent = sandpack.files["/index.jsx"]?.code || "";
-  const compiledHtml = compileEmail(emailContent);
+  const { compiledHtml } = useEmailPreview();
 
   return (
     <div className="h-full overflow-auto bg-muted/30 p-4">

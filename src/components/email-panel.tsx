@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/shadcn-io/sandbox";
 import { CodeIcon, AppWindowIcon } from "lucide-react";
 import { EmailPreview } from "@/components/email-preview";
+import { EmailPreviewProvider } from "@/contexts/email-preview-context";
+import { CompileButton } from "@/components/compile-button";
 import { defaultEmailContent } from "@/lib/default-email";
 
 export function EmailPanel() {
@@ -33,26 +35,29 @@ export function EmailPanel() {
           activeFile: "/index.jsx",
         }}
       >
-        <SandboxLayout>
-          <SandboxTabs defaultValue="code">
-            <SandboxTabsList>
-              <SandboxTabsTrigger value="code">
-                <CodeIcon size={14} />
-                Code
-              </SandboxTabsTrigger>
-              <SandboxTabsTrigger value="preview">
-                <AppWindowIcon size={14} />
-                Preview
-              </SandboxTabsTrigger>
-            </SandboxTabsList>
-            <SandboxTabsContent className="overflow-hidden" value="code">
-              <SandboxCodeEditor showLineNumbers style={{ height: "100%" }} />
-            </SandboxTabsContent>
-            <SandboxTabsContent className="overflow-hidden" value="preview">
-              <EmailPreview />
-            </SandboxTabsContent>
-          </SandboxTabs>
-        </SandboxLayout>
+        <EmailPreviewProvider>
+          <SandboxLayout>
+            <SandboxTabs defaultValue="code">
+              <SandboxTabsList>
+                <SandboxTabsTrigger value="code">
+                  <CodeIcon size={14} />
+                  Code
+                </SandboxTabsTrigger>
+                <SandboxTabsTrigger value="preview">
+                  <AppWindowIcon size={14} />
+                  Preview
+                </SandboxTabsTrigger>
+                <CompileButton />
+              </SandboxTabsList>
+              <SandboxTabsContent className="overflow-hidden" value="code">
+                <SandboxCodeEditor showLineNumbers style={{ height: "100%" }} />
+              </SandboxTabsContent>
+              <SandboxTabsContent className="overflow-hidden" value="preview">
+                <EmailPreview />
+              </SandboxTabsContent>
+            </SandboxTabs>
+          </SandboxLayout>
+        </EmailPreviewProvider>
       </SandboxProvider>
     </div>
   );
