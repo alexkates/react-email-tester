@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import {
   SandboxProvider,
@@ -23,6 +23,10 @@ export function EmailPanel() {
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("code");
 
+  const handleCompileComplete = useCallback(() => {
+    setActiveTab("preview");
+  }, []);
+
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
 
@@ -36,25 +40,34 @@ export function EmailPanel() {
         activeFile: "/index.jsx",
       }}
     >
-      <EmailPreviewProvider onCompileComplete={() => setActiveTab("preview")}>
+      <EmailPreviewProvider onCompileComplete={handleCompileComplete}>
         <SandboxLayout>
           <SandboxTabs value={activeTab} onValueChange={setActiveTab}>
-            <SandboxTabsList>
-              <SandboxTabsTrigger value="code">
-                <CodeIcon size={14} />
-                Code
-              </SandboxTabsTrigger>
-              <SandboxTabsTrigger value="preview">
-                <AppWindowIcon size={14} />
-                Preview
-              </SandboxTabsTrigger>
-              <div className="ml-auto flex gap-2">
+            <SandboxTabsList className="justify-between">
+              <div>
+                <SandboxTabsTrigger value="code">
+                  <CodeIcon size={14} />
+                  Code
+                </SandboxTabsTrigger>
+                <SandboxTabsTrigger value="preview">
+                  <AppWindowIcon size={14} />
+                  Preview
+                </SandboxTabsTrigger>
+              </div>
+              <h1 className="text-xl font-semibold text-primary">
+                React Email Preview
+              </h1>
+              <div className="flex gap-2">
                 <CompileButton />
                 <ModeToggle />
               </div>
             </SandboxTabsList>
             <SandboxTabsContent className="overflow-hidden" value="code">
-              <SandboxCodeEditor showLineNumbers style={{ height: "100%" }} />
+              <SandboxCodeEditor
+                showLineNumbers
+                showInlineErrors
+                className="h-full"
+              />
             </SandboxTabsContent>
             <SandboxTabsContent className="overflow-hidden" value="preview">
               <EmailPreview />
