@@ -6,9 +6,16 @@ import { createContext, useContext, useState, useCallback } from "react";
 import { compileEmail } from "@/app/actions/compile-email";
 import * as React from "react";
 
+type CompiledEmail = {
+  fileName: string;
+  html: string;
+};
+
 type EmailPreviewContextValue = {
   isCompiling: boolean;
-  compiledHtml: string;
+  compiledEmails: CompiledEmail[];
+  activePreview: string;
+  setActivePreview: (fileName: string) => void;
   compile: () => Promise<void>;
   onCompileComplete?: () => void;
 };
@@ -35,21 +42,53 @@ export function EmailPreviewProvider({
   onCompileComplete?: () => void;
 }) {
   const { sandpack } = useSandpack();
-  const [compiledHtml, setCompiledHtml] = useState<string>("");
+  const [compiledEmails, setCompiledEmails] = useState<CompiledEmail[]>([]);
+  const [activePreview, setActivePreview] = useState<string>("");
   const [isCompiling, setIsCompiling] = useState(false);
 
   const compile = useCallback(async () => {
-    const emailContent = sandpack.files["/index.jsx"]?.code || "";
     setIsCompiling(true);
-    const html = await compileEmail(emailContent);
-    setCompiledHtml(html);
+
+    // Get all email files (jsx/tsx files)
+    const emailFiles = Object.keys(sandpack.files).filter(
+      (path) =>
+        (path.endsWith(".jsx") || path.endsWith(".tsx")) &&
+        !path.includes("node_modules")
+    );
+
+    // Compile all files
+    const compiledResults = await Promise.all(
+      emailFiles.map(async (filePath) => {
+        const emailContent = sandpack.files[filePath]?.code || "";
+        const html = await compileEmail(emailContent);
+        return {
+          fileName: filePath.replace("/", ""),
+          html,
+        };
+      })
+    );
+
+    setCompiledEmails(compiledResults);
+
+    // Set active preview to the first file if not set
+    if (compiledResults.length > 0 && !activePreview) {
+      setActivePreview(compiledResults[0].fileName);
+    }
+
     setIsCompiling(false);
     onCompileComplete?.();
-  }, [sandpack.files, onCompileComplete]);
+  }, [sandpack.files, activePreview, onCompileComplete]);
 
   return (
     <EmailPreviewContext.Provider
-      value={{ isCompiling, compiledHtml, compile, onCompileComplete }}
+      value={{
+        isCompiling,
+        compiledEmails,
+        activePreview,
+        setActivePreview,
+        compile,
+        onCompileComplete,
+      }}
     >
       {children}
     </EmailPreviewContext.Provider>
