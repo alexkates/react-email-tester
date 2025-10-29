@@ -10,17 +10,7 @@ export function CompileButton() {
 
   return (
     <Button size="sm" onClick={compile} disabled={isCompiling}>
-      {isCompiling ? (
-        <>
-          <Spinner className="size-4" />
-          Compiling...
-        </>
-      ) : (
-        <>
-          <SendIcon size={14} />
-          Compile
-        </>
-      )}
+      {isCompiling ? <Spinner className="size-4" /> : <SendIcon size={14} />}
     </Button>
   );
 }
