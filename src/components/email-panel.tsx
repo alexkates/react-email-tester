@@ -17,9 +17,12 @@ import { EmailPreview } from "@/components/email-preview";
 import { EmailPreviewProvider } from "@/contexts/email-preview-context";
 import { CompileButton } from "@/components/compile-button";
 import { ModeToggle } from "@/components/mode-toggle";
-import { appleReceiptTemplate } from "@/templates/apple-receipt";
 
-export function EmailPanel() {
+interface EmailPanelProps {
+  templates: Record<string, string>;
+}
+
+export function EmailPanel({ templates }: EmailPanelProps) {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("code");
@@ -34,11 +37,9 @@ export function EmailPanel() {
   return (
     <SandboxProvider
       theme={theme === "dark" ? "dark" : "light"}
-      files={{
-        "/apple-receipt.jsx": appleReceiptTemplate,
-      }}
+      files={templates}
       options={{
-        activeFile: "/apple-receipt.jsx",
+        activeFile: Object.keys(templates)[0],
       }}
     >
       <EmailPreviewProvider onCompileComplete={handleCompileComplete}>
