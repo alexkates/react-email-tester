@@ -28,6 +28,7 @@ export const AppleReceiptEmail = () => (
                 width="42"
                 height="42"
                 alt="Apple Logo"
+                style={{ width: "42px", height: "42px" }}
               />
             </Column>
 
@@ -115,7 +116,7 @@ export const AppleReceiptEmail = () => (
                 width="64"
                 height="64"
                 alt="HBO Max"
-                style={productIcon}
+                style={{ ...productIcon, width: "64px", height: "64px" }}
               />
             </Column>
             <Column style={{ paddingLeft: "22px" }}>
@@ -157,6 +158,7 @@ export const AppleReceiptEmail = () => (
                 width="60"
                 height="17"
                 alt="Apple Card"
+                style={{ width: "60px", height: "17px" }}
               />
             </Column>
           </Row>
@@ -177,7 +179,7 @@ export const AppleReceiptEmail = () => (
                   width="28"
                   height="28"
                   alt="Apple Wallet"
-                  style={walletImage}
+                  style={{ ...walletImage, width: "28px", height: "28px" }}
                 />
                 <span style={walletLinkText}>Apply and use in minutes</span>
               </Link>
@@ -248,6 +250,7 @@ export const AppleReceiptEmail = () => (
                 width="26"
                 height="26"
                 alt="Apple Card"
+                style={{ width: "26px", height: "26px" }}
               />
             </Column>
           </Row>
