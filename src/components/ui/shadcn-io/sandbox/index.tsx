@@ -204,9 +204,14 @@ export type SandboxCodeEditorProps = CodeEditorProps;
 
 export const SandboxCodeEditor = ({
   showTabs = false,
+  className,
   ...props
 }: SandboxCodeEditorProps): ReactNode => (
-  <SandpackCodeEditor showTabs={showTabs} {...props} />
+  <SandpackCodeEditor
+    showTabs={showTabs}
+    className={cn("h-full!", className)}
+    {...props}
+  />
 );
 
 export type SandboxConsoleProps = Parameters<typeof SandpackConsole>[0];
@@ -245,7 +250,7 @@ export const SandboxFileExplorer = ({
 }: SandboxFileExplorerProps): ReactNode => (
   <SandpackFileExplorer
     autoHiddenFiles={autoHiddenFiles}
-    className={cn("h-full", className)}
+    className={cn("h-full!", className)}
     {...props}
   />
 );
