@@ -18,38 +18,44 @@ import { EmailPreviewProvider } from "@/contexts/email-preview-context";
 import { CompileButton } from "@/components/compile-button";
 import { ModeToggle } from "@/components/mode-toggle";
 import { NewFileDialog } from "@/components/new-file-dialog";
-import {
-  FileManagerProvider,
-  useFileManager,
-} from "@/contexts/file-manager-context";
 
 interface EmailPanelProps {
   templates: Record<string, string>;
 }
 
-function EmailPanelInner({
-  initialTemplates,
-}: {
-  initialTemplates: Record<string, string>;
-}) {
+export function EmailPanel({ templates }: EmailPanelProps) {
   const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("code");
-  const { files, visibleFiles } = useFileManager();
+  const [files, setFiles] = useState<Record<string, string>>(templates);
 
   const handleCompileComplete = useCallback(() => {
     setActiveTab("preview");
   }, []);
+
+  const handleFilesUpdate = useCallback(
+    (updatedFiles: Record<string, string>) => {
+      setFiles(updatedFiles);
+    },
+    []
+  );
+
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
 
   return (
     <SandboxProvider
       theme={theme === "dark" ? "dark" : "light"}
       files={files}
       options={{
-        activeFile: Object.keys(initialTemplates)[0],
-        visibleFiles: visibleFiles,
+        activeFile: Object.keys(templates)[0],
       }}
     >
-      <EmailPreviewProvider onCompileComplete={handleCompileComplete}>
+      <EmailPreviewProvider
+        onCompileComplete={handleCompileComplete}
+        initialFiles={templates}
+        onFilesUpdate={handleFilesUpdate}
+      >
         <SandboxTabs value={activeTab} onValueChange={setActiveTab}>
           <SandboxTabsList className="justify-between">
             <div>
@@ -83,18 +89,5 @@ function EmailPanelInner({
         </SandboxTabs>
       </EmailPreviewProvider>
     </SandboxProvider>
-  );
-}
-
-export function EmailPanel({ templates }: EmailPanelProps) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
-
-  return (
-    <FileManagerProvider initialFiles={templates}>
-      <EmailPanelInner initialTemplates={templates} />
-    </FileManagerProvider>
   );
 }

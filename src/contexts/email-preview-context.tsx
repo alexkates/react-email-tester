@@ -18,6 +18,8 @@ type EmailPreviewContextValue = {
   setActivePreview: (fileName: string) => void;
   compile: () => Promise<void>;
   onCompileComplete?: () => void;
+  files: Record<string, string>;
+  addFile: (filePath: string, content: string) => void;
 };
 
 const EmailPreviewContext = createContext<EmailPreviewContextValue | undefined>(
@@ -37,14 +39,34 @@ export const useEmailPreview = () => {
 export function EmailPreviewProvider({
   children,
   onCompileComplete,
+  initialFiles,
+  onFilesUpdate,
 }: {
   children: React.ReactNode;
   onCompileComplete?: () => void;
+  initialFiles: Record<string, string>;
+  onFilesUpdate?: (files: Record<string, string>) => void;
 }) {
   const { sandpack } = useSandpack();
   const [compiledEmails, setCompiledEmails] = useState<CompiledEmail[]>([]);
   const [activePreview, setActivePreview] = useState<string>("");
   const [isCompiling, setIsCompiling] = useState(false);
+  const [files, setFiles] = useState<Record<string, string>>(initialFiles);
+
+  const addFile = useCallback((filePath: string, content: string) => {
+    const updatedFiles = {
+      ...files,
+      [filePath]: content,
+    };
+    setFiles(updatedFiles);
+    onFilesUpdate?.(updatedFiles);
+    
+    // Also update Sandpack
+    sandpack.updateFile(filePath, content);
+    setTimeout(() => {
+      sandpack.setActiveFile(filePath);
+    }, 50);
+  }, [files, onFilesUpdate, sandpack]);
 
   const compile = useCallback(async () => {
     setIsCompiling(true);
@@ -88,6 +110,8 @@ export function EmailPreviewProvider({
         setActivePreview,
         compile,
         onCompileComplete,
+        files,
+        addFile,
       }}
     >
       {children}

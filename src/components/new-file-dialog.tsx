@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useFileManager } from "@/contexts/file-manager-context";
+import { useEmailPreview } from "@/contexts/email-preview-context";
 
 const DEFAULT_TEMPLATE = `export default function EmailTemplate() {
   return (
@@ -29,7 +29,7 @@ const DEFAULT_TEMPLATE = `export default function EmailTemplate() {
 
 export function NewFileDialog() {
   const { sandpack } = useSandpack();
-  const { addFile } = useFileManager();
+  const { addFile } = useEmailPreview();
   const [open, setOpen] = useState(false);
   const [fileName, setFileName] = useState("");
   const [error, setError] = useState("");
@@ -56,16 +56,8 @@ export function NewFileDialog() {
       return;
     }
 
-    // Update the file using the same method as initial templates
-    sandpack.updateFile(filePath, DEFAULT_TEMPLATE);
-
-    // Add to files and visible files list
+    // Add to files - this will update both context and Sandpack
     addFile(filePath, DEFAULT_TEMPLATE);
-
-    // Set the newly created file as active
-    setTimeout(() => {
-      sandpack.setActiveFile(filePath);
-    }, 50);
 
     // Reset and close
     setFileName("");
