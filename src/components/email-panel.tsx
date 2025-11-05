@@ -27,7 +27,11 @@ interface EmailPanelProps {
   templates: Record<string, string>;
 }
 
-function EmailPanelInner({ initialTemplates }: { initialTemplates: Record<string, string> }) {
+function EmailPanelInner({
+  initialTemplates,
+}: {
+  initialTemplates: Record<string, string>;
+}) {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState("code");
   const { files, visibleFiles } = useFileManager();
