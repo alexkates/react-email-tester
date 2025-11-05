@@ -1,0 +1,22 @@
+# Dependencies
+node_modules
+bun.lockb
+
+# Build outputs
+.next
+out
+dist
+build
+
+# Misc
+.DS_Store
+*.log
+.env
+.env.local
+.env.production.local
+
+# Prettier ignore
+package-lock.json
+bun.lock
+yarn.lock
+pnpm-lock.yaml

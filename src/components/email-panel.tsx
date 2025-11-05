@@ -68,7 +68,7 @@ export function EmailPanel({ templates }: EmailPanelProps) {
                 Preview
               </SandboxTabsTrigger>
             </div>
-            <h1 className="text-xl font-semibold text-primary">
+            <h1 className="text-primary text-xl font-semibold">
               React Email Preview
             </h1>
             <div className="flex gap-2">

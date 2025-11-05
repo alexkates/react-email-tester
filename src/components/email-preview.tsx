@@ -58,7 +58,7 @@ export function EmailPreview() {
     <div className="flex h-full flex-col">
       {/* Preview file tabs */}
       {compiledEmails.length > 0 && (
-        <div className="flex gap-1 border-b bg-secondary/30 p-2">
+        <div className="bg-secondary/30 flex gap-1 border-b p-2">
           {compiledEmails.map((email) => (
             <Button
               key={email.fileName}
@@ -68,7 +68,7 @@ export function EmailPreview() {
               className={cn(
                 "gap-1.5 text-xs",
                 activePreview === email.fileName &&
-                  "bg-accent font-medium text-accent-foreground"
+                  "bg-accent text-accent-foreground font-medium"
               )}
             >
               <FileIcon size={12} />
@@ -79,7 +79,7 @@ export function EmailPreview() {
       )}
 
       {/* Preview content */}
-      <div className="flex-1 overflow-auto bg-muted/30 p-4">
+      <div className="bg-muted/30 flex-1 overflow-auto p-4">
         {currentEmail ? (
           <iframe
             ref={iframeRef}
@@ -88,7 +88,7 @@ export function EmailPreview() {
             sandbox="allow-same-origin"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-muted-foreground">
+          <div className="text-muted-foreground flex h-full items-center justify-center">
             <div className="text-center">
               <p className="mb-2 text-sm">No preview available</p>
               <p className="text-xs">

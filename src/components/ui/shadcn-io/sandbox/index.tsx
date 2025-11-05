@@ -48,7 +48,7 @@ export const SandboxLayout = ({
 }: SandpackLayoutProps): ReactNode => (
   <SandpackLayout
     className={cn(
-      "rounded-none! border-none! bg-transparent! h-full!",
+      "h-full! rounded-none! border-none! bg-transparent!",
       className
     )}
     {...props}
@@ -131,7 +131,7 @@ export const SandboxTabsList = ({
 }: SandboxTabsListProps): ReactNode => (
   <div
     className={cn(
-      "inline-flex w-full shrink-0 items-center justify-start border-b bg-secondary p-2 text-muted-foreground",
+      "bg-secondary text-muted-foreground inline-flex w-full shrink-0 items-center justify-start border-b p-2",
       className
     )}
     role="tablist"
@@ -161,7 +161,7 @@ export const SandboxTabsTrigger = ({
     <button
       aria-selected={selectedTab === value}
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md px-3 py-1 font-medium text-sm ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow",
+        "ring-offset-background focus-visible:ring-ring data-[state=active]:bg-background data-[state=active]:text-foreground inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-1 text-sm font-medium whitespace-nowrap transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow",
         className
       )}
       data-state={selectedTab === value ? "active" : "inactive"}
@@ -187,7 +187,7 @@ export const SandboxTabsContent = ({
     <div
       aria-hidden={selectedTab !== value}
       className={cn(
-        "flex-1 overflow-y-auto ring-offset-background transition-opacity duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "ring-offset-background focus-visible:ring-ring flex-1 overflow-y-auto transition-opacity duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
         selectedTab === value
           ? "h-auto w-auto opacity-100"
           : "pointer-events-none absolute h-0 w-0 opacity-0",
