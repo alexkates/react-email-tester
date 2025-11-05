@@ -17,29 +17,32 @@ import { EmailPreview } from "@/components/email-preview";
 import { EmailPreviewProvider } from "@/contexts/email-preview-context";
 import { CompileButton } from "@/components/compile-button";
 import { ModeToggle } from "@/components/mode-toggle";
+import { NewFileDialog } from "@/components/new-file-dialog";
+import {
+  FileManagerProvider,
+  useFileManager,
+} from "@/contexts/file-manager-context";
 
 interface EmailPanelProps {
   templates: Record<string, string>;
 }
 
-export function EmailPanel({ templates }: EmailPanelProps) {
+function EmailPanelInner({ initialTemplates }: { initialTemplates: Record<string, string> }) {
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("code");
+  const { files, visibleFiles } = useFileManager();
 
   const handleCompileComplete = useCallback(() => {
     setActiveTab("preview");
   }, []);
 
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
-
   return (
     <SandboxProvider
       theme={theme === "dark" ? "dark" : "light"}
-      files={templates}
+      files={files}
       options={{
-        activeFile: Object.keys(templates)[0],
+        activeFile: Object.keys(initialTemplates)[0],
+        visibleFiles: visibleFiles,
       }}
     >
       <EmailPreviewProvider onCompileComplete={handleCompileComplete}>
@@ -59,6 +62,7 @@ export function EmailPanel({ templates }: EmailPanelProps) {
               React Email Preview
             </h1>
             <div className="flex gap-2">
+              <NewFileDialog />
               <CompileButton />
               <ModeToggle />
             </div>
@@ -75,5 +79,18 @@ export function EmailPanel({ templates }: EmailPanelProps) {
         </SandboxTabs>
       </EmailPreviewProvider>
     </SandboxProvider>
+  );
+}
+
+export function EmailPanel({ templates }: EmailPanelProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+
+  return (
+    <FileManagerProvider initialFiles={templates}>
+      <EmailPanelInner initialTemplates={templates} />
+    </FileManagerProvider>
   );
 }
