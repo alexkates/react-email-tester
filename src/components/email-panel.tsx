@@ -20,14 +20,14 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { NewFileDialog } from "@/components/new-file-dialog";
 
 interface EmailPanelProps {
-  templates: Record<string, string>;
+  defaultTemplates: Record<string, string>;
 }
 
-export function EmailPanel({ templates }: EmailPanelProps) {
+export function EmailPanel({ defaultTemplates }: EmailPanelProps) {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("code");
-  const [files, setFiles] = useState<Record<string, string>>(templates);
+  const [files, setFiles] = useState<Record<string, string>>(defaultTemplates);
 
   const handleCompileComplete = useCallback(() => {
     setActiveTab("preview");
@@ -48,12 +48,12 @@ export function EmailPanel({ templates }: EmailPanelProps) {
       theme={theme === "dark" ? "dark" : "light"}
       files={files}
       options={{
-        activeFile: Object.keys(templates)[0],
+        activeFile: Object.keys(defaultTemplates)[0],
       }}
     >
       <EmailPreviewProvider
         onCompileComplete={handleCompileComplete}
-        initialFiles={templates}
+        initialFiles={defaultTemplates}
         onFilesUpdate={handleFilesUpdate}
       >
         <SandboxTabs value={activeTab} onValueChange={setActiveTab}>
@@ -72,7 +72,7 @@ export function EmailPanel({ templates }: EmailPanelProps) {
               React Email Preview
             </h1>
             <div className="flex gap-2">
-              <NewFileDialog />
+              <NewFileDialog defaultTemplate={defaultTemplates["generic"]} />
               <CompileButton />
               <ThemeToggle />
             </div>

@@ -17,17 +17,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEmailPreview } from "@/contexts/email-preview-context";
 
-const DEFAULT_TEMPLATE = `export default function EmailTemplate() {
-  return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px' }}>
-      <h1>New Email Template</h1>
-      <p>Start editing to create your email!</p>
-    </div>
-  );
-}
-`;
-
-export function NewFileDialog() {
+export function NewFileDialog({
+  defaultTemplate,
+}: {
+  defaultTemplate: string;
+}) {
   const { sandpack } = useSandpack();
   const { addFile } = useEmailPreview();
   const [open, setOpen] = useState(false);
@@ -57,7 +51,7 @@ export function NewFileDialog() {
     }
 
     // Add to files - this will update both context and Sandpack
-    addFile(filePath, DEFAULT_TEMPLATE);
+    addFile(filePath, defaultTemplate);
 
     // Reset and close
     setFileName("");

@@ -1,8 +1,8 @@
 import { EmailPanel } from "@/components/email-panel";
-import { getAllTemplates } from "@/lib/get-template";
+import { getDefaultTemplates } from "@/server/get-default-templates";
 
 export default function Home() {
-  const templates = getAllTemplates();
+  const templates = getDefaultTemplates();
 
-  return <EmailPanel templates={templates} />;
+  return <EmailPanel defaultTemplates={templates} />;
 }

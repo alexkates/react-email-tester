@@ -3,7 +3,7 @@
 import "web-streams-polyfill/polyfill";
 import { useSandpack } from "@codesandbox/sandpack-react";
 import { createContext, useContext, useState, useCallback } from "react";
-import { compileEmail } from "@/app/actions/compile-email";
+import { compileEmail } from "@/server/compile-email";
 import * as React from "react";
 
 type CompiledEmail = {
