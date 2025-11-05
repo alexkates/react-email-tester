@@ -16,7 +16,7 @@ import { CodeIcon, AppWindowIcon } from "lucide-react";
 import { EmailPreview } from "@/components/email-preview";
 import { EmailPreviewProvider } from "@/contexts/email-preview-context";
 import { CompileButton } from "@/components/compile-button";
-import { ModeToggle } from "@/components/mode-toggle";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { NewFileDialog } from "@/components/new-file-dialog";
 
 interface EmailPanelProps {
@@ -74,7 +74,7 @@ export function EmailPanel({ templates }: EmailPanelProps) {
             <div className="flex gap-2">
               <NewFileDialog />
               <CompileButton />
-              <ModeToggle />
+              <ThemeToggle />
             </div>
           </SandboxTabsList>
           <SandboxTabsContent value="code">

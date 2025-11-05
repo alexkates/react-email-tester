@@ -127,7 +127,7 @@ bun start    # Start production server
   - Interactive components (onClick, useState, etc.)
   - Browser APIs (localStorage, window)
   - React hooks (useEffect, useContext)
-  - Theme components (ModeToggle, ThemeProvider)
+  - Theme components (ThemeToggle, ThemeProvider)
   - All shadcn UI components in `components/ui/`
 
 ### Theme Implementation
