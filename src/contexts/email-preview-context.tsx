@@ -53,20 +53,23 @@ export function EmailPreviewProvider({
   const [isCompiling, setIsCompiling] = useState(false);
   const [files, setFiles] = useState<Record<string, string>>(initialFiles);
 
-  const addFile = useCallback((filePath: string, content: string) => {
-    const updatedFiles = {
-      ...files,
-      [filePath]: content,
-    };
-    setFiles(updatedFiles);
-    onFilesUpdate?.(updatedFiles);
-    
-    // Also update Sandpack
-    sandpack.updateFile(filePath, content);
-    setTimeout(() => {
-      sandpack.setActiveFile(filePath);
-    }, 50);
-  }, [files, onFilesUpdate, sandpack]);
+  const addFile = useCallback(
+    (filePath: string, content: string) => {
+      const updatedFiles = {
+        ...files,
+        [filePath]: content,
+      };
+      setFiles(updatedFiles);
+      onFilesUpdate?.(updatedFiles);
+
+      // Also update Sandpack
+      sandpack.updateFile(filePath, content);
+      setTimeout(() => {
+        sandpack.setActiveFile(filePath);
+      }, 50);
+    },
+    [files, onFilesUpdate, sandpack]
+  );
 
   const compile = useCallback(async () => {
     setIsCompiling(true);
