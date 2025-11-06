@@ -1,9 +1,9 @@
 import { readFileSync, readdirSync } from "fs";
 import { join } from "path";
 
-const TEMPLATES_DIR = join(process.cwd(), "src/data/default-templates");
+const TEMPLATES_DIR = join(process.cwd(), "src/examples");
 
-export function getDefaultTemplates(): Record<string, string> {
+export function getExamples(): Record<string, string> {
   const files = readdirSync(TEMPLATES_DIR).filter((file) =>
     file.endsWith(".tsx")
   );
