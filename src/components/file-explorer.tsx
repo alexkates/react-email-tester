@@ -50,8 +50,8 @@ export function FileExplorer() {
 
   return (
     <>
-      <div className="flex h-full flex-col border-r bg-background">
-        <div className="border-b p-2 text-xs font-semibold text-muted-foreground">
+      <div className="bg-background flex h-full flex-col border-r">
+        <div className="text-muted-foreground border-b p-2 text-xs font-semibold">
           FILES
         </div>
         <div className="flex-1 overflow-auto">
@@ -62,12 +62,12 @@ export function FileExplorer() {
               <div
                 key={filePath}
                 className={cn(
-                  "group/item flex items-center justify-between gap-2 px-3 py-1.5 text-sm cursor-pointer hover:bg-accent transition-colors",
+                  "group/item hover:bg-accent flex cursor-pointer items-center justify-between gap-2 px-3 py-1.5 text-sm transition-colors",
                   isActive && "bg-accent text-accent-foreground font-medium"
                 )}
                 onClick={() => sandpack.openFile(filePath)}
               >
-                <div className="flex items-center gap-2 flex-1 min-w-0">
+                <div className="flex min-w-0 flex-1 items-center gap-2">
                   <FileIcon size={14} className="shrink-0" />
                   <span className="truncate">{getFileName(filePath)}</span>
                 </div>
@@ -75,9 +75,9 @@ export function FileExplorer() {
                   <button
                     onClick={(e) => handleDeleteClick(filePath, e)}
                     className={cn(
-                      "shrink-0 p-1 rounded transition-all opacity-0 group-hover/item:opacity-100",
+                      "shrink-0 rounded p-1 opacity-0 transition-all group-hover/item:opacity-100",
                       "hover:bg-destructive/10 hover:text-destructive",
-                      "focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring"
+                      "focus:ring-ring focus:opacity-100 focus:ring-2 focus:outline-none"
                     )}
                     aria-label={`Delete ${getFileName(filePath)}`}
                   >
