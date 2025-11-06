@@ -4,13 +4,17 @@ import { useCallback, useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import {
   SandboxProvider,
-  SandboxLayout,
   SandboxCodeEditor,
   SandboxTabs,
   SandboxTabsList,
   SandboxTabsTrigger,
   SandboxTabsContent,
 } from "@/components/ui/shadcn-io/sandbox";
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from "@/components/ui/resizable";
 import { CodeIcon, AppWindowIcon } from "lucide-react";
 import { EmailPreview } from "@/components/email-preview";
 import { EmailPreviewProvider } from "@/contexts/email-preview-context";
@@ -112,10 +116,15 @@ export function EmailPanel({ defaultTemplates }: EmailPanelProps) {
             </div>
           </SandboxTabsList>
           <SandboxTabsContent value="code">
-            <SandboxLayout>
-              <FileExplorer />
-              <SandboxCodeEditor showLineNumbers />
-            </SandboxLayout>
+            <ResizablePanelGroup direction="horizontal" className="h-full">
+              <ResizablePanel defaultSize={20} minSize={15} maxSize={40}>
+                <FileExplorer />
+              </ResizablePanel>
+              <ResizableHandle withHandle />
+              <ResizablePanel defaultSize={80}>
+                <SandboxCodeEditor showLineNumbers />
+              </ResizablePanel>
+            </ResizablePanelGroup>
           </SandboxTabsContent>
           <SandboxTabsContent value="preview">
             <EmailPreview />
