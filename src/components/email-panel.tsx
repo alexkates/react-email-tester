@@ -6,7 +6,6 @@ import {
   SandboxProvider,
   SandboxLayout,
   SandboxCodeEditor,
-  SandboxFileExplorer,
   SandboxTabs,
   SandboxTabsList,
   SandboxTabsTrigger,
@@ -18,6 +17,7 @@ import { EmailPreviewProvider } from "@/contexts/email-preview-context";
 import { CompileButton } from "@/components/compile-button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { NewFileDialog } from "@/components/new-file-dialog";
+import { FileExplorer } from "@/components/file-explorer";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
 interface EmailPanelProps {
@@ -51,6 +51,25 @@ export function EmailPanel({ defaultTemplates }: EmailPanelProps) {
     setActiveFile(filePath);
   }, []);
 
+  const handleDeleteFile = useCallback(
+    (filePath: string) => {
+      setFiles((prev) => {
+        const newFiles = { ...prev };
+        delete newFiles[filePath];
+        return newFiles;
+      });
+
+      // If the deleted file was active, switch to another file
+      if (activeFile === filePath) {
+        const remainingFiles = Object.keys(files).filter((f) => f !== filePath);
+        if (remainingFiles.length > 0) {
+          setActiveFile(remainingFiles[0]);
+        }
+      }
+    },
+    [activeFile, files]
+  );
+
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
 
@@ -67,6 +86,7 @@ export function EmailPanel({ defaultTemplates }: EmailPanelProps) {
         onCompileComplete={handleCompileComplete}
         initialFiles={defaultTemplates}
         onAddFile={handleAddFile}
+        onDeleteFile={handleDeleteFile}
       >
         <SandboxTabs value={activeTab} onValueChange={setActiveTab}>
           <SandboxTabsList className="justify-between">
@@ -93,7 +113,7 @@ export function EmailPanel({ defaultTemplates }: EmailPanelProps) {
           </SandboxTabsList>
           <SandboxTabsContent value="code">
             <SandboxLayout>
-              <SandboxFileExplorer />
+              <FileExplorer />
               <SandboxCodeEditor showLineNumbers />
             </SandboxLayout>
           </SandboxTabsContent>

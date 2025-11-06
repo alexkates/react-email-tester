@@ -19,6 +19,7 @@ type EmailPreviewContextValue = {
   compile: () => Promise<void>;
   onCompileComplete?: () => void;
   addFile: (filePath: string, content: string) => void;
+  deleteFile: (filePath: string) => void;
 };
 
 const EmailPreviewContext = createContext<EmailPreviewContextValue | undefined>(
@@ -40,11 +41,13 @@ export function EmailPreviewProvider({
   onCompileComplete,
   initialFiles,
   onAddFile,
+  onDeleteFile,
 }: {
   children: React.ReactNode;
   onCompileComplete?: () => void;
   initialFiles: Record<string, string>;
   onAddFile?: (filePath: string, content: string) => void;
+  onDeleteFile?: (filePath: string) => void;
 }) {
   const { sandpack } = useSandpack();
   const [compiledEmails, setCompiledEmails] = useState<CompiledEmail[]>([]);
@@ -56,6 +59,13 @@ export function EmailPreviewProvider({
       onAddFile?.(filePath, content);
     },
     [onAddFile]
+  );
+
+  const deleteFile = useCallback(
+    (filePath: string) => {
+      onDeleteFile?.(filePath);
+    },
+    [onDeleteFile]
   );
 
   const compile = useCallback(async () => {
@@ -98,6 +108,7 @@ export function EmailPreviewProvider({
         compile,
         onCompileComplete,
         addFile,
+        deleteFile,
       }}
     >
       {children}
