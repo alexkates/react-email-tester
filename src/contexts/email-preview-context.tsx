@@ -53,7 +53,6 @@ export function EmailPreviewProvider({
 
   const addFile = useCallback(
     (filePath: string, content: string) => {
-      // Notify parent to update files state (which will re-render SandboxProvider)
       onAddFile?.(filePath, content);
     },
     [onAddFile]
@@ -62,14 +61,12 @@ export function EmailPreviewProvider({
   const compile = useCallback(async () => {
     setIsCompiling(true);
 
-    // Get all email files (jsx/tsx files)
     const emailFiles = Object.keys(sandpack.files).filter(
       (path) =>
         (path.endsWith(".jsx") || path.endsWith(".tsx")) &&
         !path.includes("node_modules")
     );
 
-    // Compile all files
     const compiledResults = await Promise.all(
       emailFiles.map(async (filePath) => {
         const emailContent = sandpack.files[filePath]?.code || "";
@@ -83,7 +80,6 @@ export function EmailPreviewProvider({
 
     setCompiledEmails(compiledResults);
 
-    // Set active preview to the first file if not set
     if (compiledResults.length > 0 && !activePreview) {
       setActivePreview(compiledResults[0].fileName);
     }
