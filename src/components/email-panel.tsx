@@ -28,17 +28,21 @@ export function EmailPanel({ defaultTemplates }: EmailPanelProps) {
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("code");
   const [files, setFiles] = useState<Record<string, string>>(defaultTemplates);
+  const [activeFile, setActiveFile] = useState<string>(
+    Object.keys(defaultTemplates)[0]
+  );
 
   const handleCompileComplete = useCallback(() => {
     setActiveTab("preview");
   }, []);
 
-  const handleFilesUpdate = useCallback(
-    (updatedFiles: Record<string, string>) => {
-      setFiles(updatedFiles);
-    },
-    []
-  );
+  const handleAddFile = useCallback((filePath: string, content: string) => {
+    setFiles((prev) => ({
+      ...prev,
+      [filePath]: content,
+    }));
+    setActiveFile(filePath);
+  }, []);
 
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
@@ -48,13 +52,14 @@ export function EmailPanel({ defaultTemplates }: EmailPanelProps) {
       theme={theme === "dark" ? "dark" : "light"}
       files={files}
       options={{
-        activeFile: Object.keys(defaultTemplates)[0],
+        activeFile,
+        visibleFiles: Object.keys(files),
       }}
     >
       <EmailPreviewProvider
         onCompileComplete={handleCompileComplete}
         initialFiles={defaultTemplates}
-        onFilesUpdate={handleFilesUpdate}
+        onAddFile={handleAddFile}
       >
         <SandboxTabs value={activeTab} onValueChange={setActiveTab}>
           <SandboxTabsList className="justify-between">
@@ -72,7 +77,9 @@ export function EmailPanel({ defaultTemplates }: EmailPanelProps) {
               React Email Preview
             </h1>
             <div className="flex gap-2">
-              <NewFileDialog defaultTemplate={defaultTemplates["generic"]} />
+              <NewFileDialog
+                defaultTemplate={defaultTemplates["/generic.tsx"] || ""}
+              />
               <CompileButton />
               <ThemeToggle />
             </div>
