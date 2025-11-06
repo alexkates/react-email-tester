@@ -159,6 +159,12 @@ Root layout sets up theming:
 - Use named exports for compound components
 - **Prefer smaller, focused components**: Break down complex UI into smaller, reusable components rather than building monolithic components. This improves maintainability, testability, and reusability
 
+### Comments
+
+- **Do NOT add one-line comments for obvious code**: Avoid comments like "Check if we're in the browser", "State to store our value", or "Build with esbuild"
+- Comments should explain **why**, not **what**: The code itself should be self-documenting
+- Use comments for complex logic, non-obvious decisions, or important context that can't be expressed in code
+
 ### Styling Classes
 
 - Order: Layout → Spacing → Colors → Typography → Effects
