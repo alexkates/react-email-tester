@@ -7,7 +7,8 @@ import { cn } from "@/lib/utils";
 import { useEffect, useRef } from "react";
 
 export function EmailPreview() {
-  const { compiledEmails, activePreview, setActivePreview } = useEmailPreview();
+  const { compiledEmails, activePreview, setActivePreview, viewportMode } =
+    useEmailPreview();
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const currentEmail = compiledEmails.find(
@@ -79,14 +80,21 @@ export function EmailPreview() {
       )}
 
       {/* Preview content */}
-      <div className="bg-muted/30 flex-1 overflow-auto p-4">
+      <div className="bg-muted/30 flex flex-1 items-center justify-center overflow-auto p-4">
         {currentEmail ? (
-          <iframe
-            ref={iframeRef}
-            title="Email Preview"
-            className="h-full w-full border-0 bg-white"
-            sandbox="allow-same-origin"
-          />
+          <div
+            className={cn(
+              "h-full bg-white transition-all",
+              viewportMode === "mobile" ? "w-[375px] shadow-xl" : "w-full"
+            )}
+          >
+            <iframe
+              ref={iframeRef}
+              title="Email Preview"
+              className="h-full w-full border-0 bg-white"
+              sandbox="allow-same-origin"
+            />
+          </div>
         ) : (
           <div className="text-muted-foreground flex h-full items-center justify-center">
             <div className="text-center">

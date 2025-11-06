@@ -11,6 +11,8 @@ type CompiledEmail = {
   html: string;
 };
 
+type ViewportMode = "desktop" | "mobile";
+
 type EmailPreviewContextValue = {
   isCompiling: boolean;
   compiledEmails: CompiledEmail[];
@@ -20,6 +22,8 @@ type EmailPreviewContextValue = {
   onCompileComplete?: () => void;
   addFile: (filePath: string, content: string) => void;
   deleteFile: (filePath: string) => void;
+  viewportMode: ViewportMode;
+  setViewportMode: (mode: ViewportMode) => void;
 };
 
 const EmailPreviewContext = createContext<EmailPreviewContextValue | undefined>(
@@ -53,6 +57,7 @@ export function EmailPreviewProvider({
   const [compiledEmails, setCompiledEmails] = useState<CompiledEmail[]>([]);
   const [activePreview, setActivePreview] = useState<string>("");
   const [isCompiling, setIsCompiling] = useState(false);
+  const [viewportMode, setViewportMode] = useState<ViewportMode>("desktop");
 
   const addFile = useCallback(
     (filePath: string, content: string) => {
@@ -109,6 +114,8 @@ export function EmailPreviewProvider({
         onCompileComplete,
         addFile,
         deleteFile,
+        viewportMode,
+        setViewportMode,
       }}
     >
       {children}

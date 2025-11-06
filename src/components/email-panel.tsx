@@ -20,6 +20,7 @@ import { CodeIcon, AppWindowIcon } from "lucide-react";
 import { EmailPreview } from "@/components/email-preview";
 import { EmailPreviewProvider } from "@/contexts/email-preview-context";
 import { CompileButton } from "@/components/compile-button";
+import { ViewportToggle } from "@/components/viewport-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { FileExplorer } from "@/components/file-explorer";
 import { useLocalStorage } from "@/hooks/use-local-storage";
@@ -108,7 +109,7 @@ export function EmailPanel({ examples }: EmailPanelProps) {
               React Email Preview
             </h1>
             <div className="flex flex-1 justify-end gap-2">
-              <CompileButton />
+              {activeTab === "preview" ? <ViewportToggle /> : <CompileButton />}
             </div>
           </SandboxTabsList>
           <SandboxTabsContent value="code">
