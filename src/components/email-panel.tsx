@@ -18,6 +18,7 @@ import { EmailPreviewProvider } from "@/contexts/email-preview-context";
 import { CompileButton } from "@/components/compile-button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { NewFileDialog } from "@/components/new-file-dialog";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
 interface EmailPanelProps {
   defaultTemplates: Record<string, string>;
@@ -27,9 +28,15 @@ export function EmailPanel({ defaultTemplates }: EmailPanelProps) {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("code");
-  const [files, setFiles] = useState<Record<string, string>>(defaultTemplates);
+
+  // Use localStorage to persist user's email files
+  const [files, setFiles] = useLocalStorage<Record<string, string>>(
+    "react-email-preview-files",
+    defaultTemplates
+  );
+
   const [activeFile, setActiveFile] = useState<string>(
-    Object.keys(defaultTemplates)[0]
+    Object.keys(files)[0] || Object.keys(defaultTemplates)[0]
   );
 
   const handleCompileComplete = useCallback(() => {
