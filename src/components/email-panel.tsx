@@ -33,7 +33,6 @@ export function EmailPanel({ defaultTemplates }: EmailPanelProps) {
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("code");
 
-  // Use localStorage to persist user's email files
   const [files, setFiles] = useLocalStorage<Record<string, string>>(
     "react-email-preview-files",
     defaultTemplates
@@ -53,6 +52,7 @@ export function EmailPanel({ defaultTemplates }: EmailPanelProps) {
       [filePath]: content,
     }));
     setActiveFile(filePath);
+    setActiveTab("code");
   }, []);
 
   const handleDeleteFile = useCallback(
