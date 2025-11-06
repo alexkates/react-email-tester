@@ -254,3 +254,18 @@ export const SandboxFileExplorer = ({
     {...props}
   />
 );
+
+export type SandboxFooterProps = HTMLAttributes<HTMLDivElement>;
+
+export const SandboxFooter = ({
+  className,
+  ...props
+}: SandboxFooterProps): ReactNode => (
+  <div
+    className={cn(
+      "bg-secondary text-muted-foreground flex w-full shrink-0 items-center justify-between border-t px-4 py-2",
+      className
+    )}
+    {...props}
+  />
+);

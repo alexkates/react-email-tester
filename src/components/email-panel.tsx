@@ -9,6 +9,7 @@ import {
   SandboxTabsList,
   SandboxTabsTrigger,
   SandboxTabsContent,
+  SandboxFooter,
 } from "@/components/ui/shadcn-io/sandbox";
 import {
   ResizablePanelGroup,
@@ -108,7 +109,6 @@ export function EmailPanel({ examples }: EmailPanelProps) {
             </h1>
             <div className="flex gap-2">
               <CompileButton />
-              <ThemeToggle />
             </div>
           </SandboxTabsList>
           <SandboxTabsContent value="code">
@@ -127,6 +127,10 @@ export function EmailPanel({ examples }: EmailPanelProps) {
           <SandboxTabsContent value="preview">
             <EmailPreview />
           </SandboxTabsContent>
+          <SandboxFooter>
+            <div />
+            <ThemeToggle />
+          </SandboxFooter>
         </SandboxTabs>
       </EmailPreviewProvider>
     </SandboxProvider>
