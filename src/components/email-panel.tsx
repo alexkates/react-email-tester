@@ -89,7 +89,6 @@ export function EmailPanel({ examples }: EmailPanelProps) {
     >
       <EmailPreviewProvider
         onCompileComplete={handleCompileComplete}
-        initialFiles={examples}
         onAddFile={handleAddFile}
         onDeleteFile={handleDeleteFile}
       >

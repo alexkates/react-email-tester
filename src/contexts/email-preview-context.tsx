@@ -43,13 +43,11 @@ export const useEmailPreview = () => {
 export function EmailPreviewProvider({
   children,
   onCompileComplete,
-  initialFiles,
   onAddFile,
   onDeleteFile,
 }: {
   children: React.ReactNode;
   onCompileComplete?: () => void;
-  initialFiles: Record<string, string>;
   onAddFile?: (filePath: string, content: string) => void;
   onDeleteFile?: (filePath: string) => void;
 }) {
