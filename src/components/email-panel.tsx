@@ -20,26 +20,25 @@ import { EmailPreview } from "@/components/email-preview";
 import { EmailPreviewProvider } from "@/contexts/email-preview-context";
 import { CompileButton } from "@/components/compile-button";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { NewFileDialog } from "@/components/new-file-dialog";
 import { FileExplorer } from "@/components/file-explorer";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
 interface EmailPanelProps {
-  defaultTemplates: Record<string, string>;
+  examples: Record<string, string>;
 }
 
-export function EmailPanel({ defaultTemplates }: EmailPanelProps) {
+export function EmailPanel({ examples }: EmailPanelProps) {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("code");
 
   const [files, setFiles] = useLocalStorage<Record<string, string>>(
     "react-email-preview-files",
-    defaultTemplates
+    examples
   );
 
   const [activeFile, setActiveFile] = useState<string>(
-    Object.keys(files)[0] || Object.keys(defaultTemplates)[0]
+    Object.keys(files)[0] || Object.keys(examples)[0]
   );
 
   const handleCompileComplete = useCallback(() => {
@@ -88,7 +87,7 @@ export function EmailPanel({ defaultTemplates }: EmailPanelProps) {
     >
       <EmailPreviewProvider
         onCompileComplete={handleCompileComplete}
-        initialFiles={defaultTemplates}
+        initialFiles={examples}
         onAddFile={handleAddFile}
         onDeleteFile={handleDeleteFile}
       >
@@ -108,9 +107,6 @@ export function EmailPanel({ defaultTemplates }: EmailPanelProps) {
               React Email Preview
             </h1>
             <div className="flex gap-2">
-              <NewFileDialog
-                defaultTemplate={defaultTemplates["/generic.tsx"] || ""}
-              />
               <CompileButton />
               <ThemeToggle />
             </div>
@@ -118,7 +114,9 @@ export function EmailPanel({ defaultTemplates }: EmailPanelProps) {
           <SandboxTabsContent value="code">
             <ResizablePanelGroup direction="horizontal" className="h-full">
               <ResizablePanel defaultSize={20} minSize={15} maxSize={40}>
-                <FileExplorer />
+                <FileExplorer
+                  exampleTemplate={examples["/generic.tsx"] || ""}
+                />
               </ResizablePanel>
               <ResizableHandle withHandle />
               <ResizablePanel defaultSize={80}>

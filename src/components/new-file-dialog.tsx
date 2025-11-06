@@ -18,9 +18,9 @@ import { Label } from "@/components/ui/label";
 import { useEmailPreview } from "@/contexts/email-preview-context";
 
 export function NewFileDialog({
-  defaultTemplate,
+  exampleTemplate,
 }: {
-  defaultTemplate: string;
+  exampleTemplate: string;
 }) {
   const { sandpack } = useSandpack();
   const { addFile } = useEmailPreview();
@@ -51,7 +51,7 @@ export function NewFileDialog({
     }
 
     // Add to files - this will update both context and Sandpack
-    addFile(filePath, defaultTemplate);
+    addFile(filePath, exampleTemplate);
 
     // Reset and close
     setFileName("");
@@ -70,9 +70,8 @@ export function NewFileDialog({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline">
+        <Button variant="ghost" size="icon" className="h-6 w-6">
           <FilePlusIcon size={14} />
-          New File
         </Button>
       </DialogTrigger>
       <DialogContent>
