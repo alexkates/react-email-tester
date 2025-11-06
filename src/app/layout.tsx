@@ -38,40 +38,6 @@ export default function RootLayout({
             <main className="container mx-auto flex max-w-7xl flex-1 flex-col overflow-hidden px-4 py-6">
               {children}
             </main>
-
-            <footer>
-              <div className="container mx-auto flex h-16 max-w-7xl items-center justify-center px-4">
-                <p className="text-muted-foreground text-sm">
-                  Built with{" "}
-                  <a
-                    href="https://nextjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-foreground underline underline-offset-4 transition-colors"
-                  >
-                    Next.js
-                  </a>
-                  ,{" "}
-                  <a
-                    href="https://ui.shadcn.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-foreground underline underline-offset-4 transition-colors"
-                  >
-                    shadcn/ui
-                  </a>{" "}
-                  and{" "}
-                  <a
-                    href="https://react.email"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-foreground underline underline-offset-4 transition-colors"
-                  >
-                    react-email
-                  </a>
-                </p>
-              </div>
-            </footer>
           </div>
         </ThemeProvider>
       </body>

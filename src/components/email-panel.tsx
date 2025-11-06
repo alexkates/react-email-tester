@@ -94,7 +94,7 @@ export function EmailPanel({ examples }: EmailPanelProps) {
       >
         <SandboxTabs value={activeTab} onValueChange={setActiveTab}>
           <SandboxTabsList className="justify-between">
-            <div>
+            <div className="flex flex-1 justify-start">
               <SandboxTabsTrigger value="code">
                 <CodeIcon size={14} />
                 Code
@@ -107,7 +107,7 @@ export function EmailPanel({ examples }: EmailPanelProps) {
             <h1 className="text-primary text-xl font-semibold">
               React Email Preview
             </h1>
-            <div className="flex gap-2">
+            <div className="flex flex-1 justify-end gap-2">
               <CompileButton />
             </div>
           </SandboxTabsList>
@@ -129,6 +129,35 @@ export function EmailPanel({ examples }: EmailPanelProps) {
           </SandboxTabsContent>
           <SandboxFooter>
             <div />
+            <p className="text-muted-foreground text-sm">
+              Built with{" "}
+              <a
+                href="https://nextjs.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground underline underline-offset-4 transition-colors"
+              >
+                Next.js
+              </a>
+              ,{" "}
+              <a
+                href="https://ui.shadcn.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground underline underline-offset-4 transition-colors"
+              >
+                shadcn/ui
+              </a>{" "}
+              and{" "}
+              <a
+                href="https://react.email"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground underline underline-offset-4 transition-colors"
+              >
+                react-email
+              </a>
+            </p>
             <ThemeToggle />
           </SandboxFooter>
         </SandboxTabs>
