@@ -1,6 +1,5 @@
 "use client";
 
-import "web-streams-polyfill/polyfill";
 import { useSandpack } from "@codesandbox/sandpack-react";
 import {
   createContext,
