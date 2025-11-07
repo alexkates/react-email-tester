@@ -3,9 +3,7 @@
 import { build } from "esbuild";
 import { render } from "@react-email/render";
 import * as React from "react";
-import { createRequire } from "module";
-
-const require = createRequire(import.meta.url || __filename);
+import * as ReactEmailComponents from "@react-email/components";
 
 /**
  * Compiles user's email template code into HTML using esbuild and React Email.
@@ -39,6 +37,16 @@ export async function compileEmail(code: string): Promise<string> {
       throw new Error("esbuild produced no output");
     }
 
+    const customRequire = (moduleName: string) => {
+      if (moduleName === "react" || moduleName === "react/jsx-runtime") {
+        return React;
+      }
+      if (moduleName === "@react-email/components") {
+        return ReactEmailComponents;
+      }
+      throw new Error(`Module not available: ${moduleName}`);
+    };
+
     const module = { exports: {} as any };
     const fn = new Function(
       "module",
@@ -47,7 +55,7 @@ export async function compileEmail(code: string): Promise<string> {
       "React",
       compiledCode
     );
-    fn(module, module.exports, require, React);
+    fn(module, module.exports, customRequire, React);
 
     // Extract the component (try default export first, then any function)
     const EmailComponent =
