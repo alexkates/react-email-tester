@@ -1,6 +1,6 @@
 "use client";
 
-import { useEmailPreview } from "@/contexts/email-preview-context";
+import { useEditor } from "@/contexts/editor-context";
 import { Button } from "@/components/ui/button";
 import { FileIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -8,7 +8,7 @@ import { useEffect, useRef } from "react";
 
 export function EmailPreview() {
   const { compiledEmails, activePreview, setActivePreview, viewportMode } =
-    useEmailPreview();
+    useEditor();
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const currentEmail = compiledEmails.find(

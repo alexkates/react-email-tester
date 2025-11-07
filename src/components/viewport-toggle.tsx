@@ -3,11 +3,11 @@
 import { Monitor, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
-import { useEmailPreview } from "@/contexts/email-preview-context";
+import { useEditor } from "@/contexts/editor-context";
 import { cn } from "@/lib/utils";
 
 export function ViewportToggle() {
-  const { viewportMode, setViewportMode } = useEmailPreview();
+  const { viewportMode, setViewportMode } = useEditor();
 
   return (
     <ButtonGroup>

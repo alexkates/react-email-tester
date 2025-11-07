@@ -1,12 +1,12 @@
 "use client";
 
 import { SendIcon } from "lucide-react";
-import { useEmailPreview } from "@/contexts/email-preview-context";
+import { useEditor } from "@/contexts/editor-context";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 export function CompileButton() {
-  const { isCompiling, compile } = useEmailPreview();
+  const { isCompiling, compile } = useEditor();
 
   return (
     <button

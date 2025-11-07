@@ -3,7 +3,7 @@
 import { useSandpack } from "@codesandbox/sandpack-react";
 import { FileIcon, Trash2Icon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useEmailPreview } from "@/contexts/email-preview-context";
+import { useEditor } from "@/contexts/editor-context";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,7 +19,7 @@ import { useState } from "react";
 
 export function FileExplorer() {
   const { sandpack } = useSandpack();
-  const { deleteFile } = useEmailPreview();
+  const { deleteFile } = useEditor();
   const [fileToDelete, setFileToDelete] = useState<string | null>(null);
 
   const visibleFiles = Object.keys(sandpack.files).filter(
