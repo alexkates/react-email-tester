@@ -3,6 +3,9 @@
 import { build } from "esbuild";
 import { render } from "@react-email/render";
 import * as React from "react";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url || __filename);
 
 /**
  * Compiles user's email template code into HTML using esbuild and React Email.
@@ -10,7 +13,6 @@ import * as React from "react";
  */
 export async function compileEmail(code: string): Promise<string> {
   try {
-    // Build with esbuild - bundles all imports and transforms JSX
     const buildResult = await build({
       stdin: {
         contents: code,
@@ -24,7 +26,12 @@ export async function compileEmail(code: string): Promise<string> {
       format: "cjs",
       jsx: "automatic",
       logLevel: "silent",
-      // Let esbuild bundle everything - no externals needed
+      external: [
+        "react",
+        "react/jsx-runtime",
+        "@react-email/components",
+        "@react-email/*",
+      ],
     });
 
     const compiledCode = buildResult.outputFiles[0]?.text;
@@ -32,10 +39,15 @@ export async function compileEmail(code: string): Promise<string> {
       throw new Error("esbuild produced no output");
     }
 
-    // Execute the compiled code to get the component
     const module = { exports: {} as any };
-    const fn = new Function("module", "exports", compiledCode);
-    fn(module, module.exports);
+    const fn = new Function(
+      "module",
+      "exports",
+      "require",
+      "React",
+      compiledCode
+    );
+    fn(module, module.exports, require, React);
 
     // Extract the component (try default export first, then any function)
     const EmailComponent =
