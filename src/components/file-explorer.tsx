@@ -17,11 +17,7 @@ import {
 import { NewFileDialog } from "@/components/new-file-dialog";
 import { useState } from "react";
 
-interface FileExplorerProps {
-  exampleTemplate: string;
-}
-
-export function FileExplorer({ exampleTemplate }: FileExplorerProps) {
+export function FileExplorer() {
   const { sandpack } = useSandpack();
   const { deleteFile } = useEmailPreview();
   const [fileToDelete, setFileToDelete] = useState<string | null>(null);
@@ -58,7 +54,7 @@ export function FileExplorer({ exampleTemplate }: FileExplorerProps) {
       <div className="bg-background flex h-full flex-col border-r">
         <div className="text-muted-foreground flex items-center justify-between border-b p-2 text-xs font-semibold">
           <span>FILES</span>
-          <NewFileDialog exampleTemplate={exampleTemplate} />
+          <NewFileDialog />
         </div>
         <div className="flex-1 overflow-auto">
           {visibleFiles.map((filePath) => {

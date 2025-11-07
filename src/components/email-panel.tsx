@@ -25,22 +25,18 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { FileExplorer } from "@/components/file-explorer";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
-interface EmailPanelProps {
-  examples: Record<string, string>;
-}
-
-export function EmailPanel({ examples }: EmailPanelProps) {
+export function EmailPanel() {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("code");
 
   const [files, setFiles] = useLocalStorage<Record<string, string>>(
     "react-email-preview-files",
-    examples
+    {}
   );
 
   const [activeFile, setActiveFile] = useState<string>(
-    Object.keys(files)[0] || Object.keys(examples)[0]
+    Object.keys(files)[0] || ""
   );
 
   const handleCompileComplete = useCallback(() => {
@@ -114,9 +110,7 @@ export function EmailPanel({ examples }: EmailPanelProps) {
           <SandboxTabsContent value="code">
             <ResizablePanelGroup direction="horizontal" className="h-full">
               <ResizablePanel defaultSize={20} minSize={15} maxSize={40}>
-                <FileExplorer
-                  exampleTemplate={examples["/generic.tsx"] || ""}
-                />
+                <FileExplorer />
               </ResizablePanel>
               <ResizableHandle withHandle />
               <ResizablePanel defaultSize={80}>
