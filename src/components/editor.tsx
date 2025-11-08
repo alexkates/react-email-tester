@@ -25,8 +25,9 @@ import { EmptyState } from "@/components/empty-state";
 import { useEffect, useRef } from "react";
 
 export function Editor() {
-  const { activeTab, setActiveTab, activeFile, files, updateFile } = useEditor();
-  
+  const { activeTab, setActiveTab, activeFile, files, updateFile } =
+    useEditor();
+
   let sandpack;
   try {
     sandpack = useSandpack().sandpack;
@@ -55,7 +56,10 @@ export function Editor() {
 
     // Delete removed files from Sandpack
     prevFilePaths.forEach((filePath) => {
-      if (!files[filePath] && (filePath.endsWith(".jsx") || filePath.endsWith(".tsx"))) {
+      if (
+        !files[filePath] &&
+        (filePath.endsWith(".jsx") || filePath.endsWith(".tsx"))
+      ) {
         sandpack.deleteFile(filePath);
       }
     });
@@ -81,7 +85,7 @@ export function Editor() {
         <div className="flex-1">
           <EmptyState />
         </div>
-        <div className="border-t p-4 flex items-center justify-between">
+        <div className="flex items-center justify-between border-t p-4">
           <div />
           <p className="text-muted-foreground text-sm">
             Built with{" "}
