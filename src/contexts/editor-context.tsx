@@ -9,7 +9,6 @@ import {
 } from "react";
 import { compileEmail } from "@/server/compile-email";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import { DEFAULT_WELCOME_EMAIL } from "@/lib/default-email";
 import * as React from "react";
 
 type CompiledEmail = {
@@ -42,7 +41,7 @@ type EditorContextValue = {
   viewportMode: ViewportMode;
 };
 
-const DEFAULT_FILES = { "welcome.tsx": DEFAULT_WELCOME_EMAIL };
+const DEFAULT_FILES: Record<string, string> = {};
 
 const EditorContext = createContext<EditorContextValue | undefined>(undefined);
 
@@ -70,8 +69,11 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    if (Object.keys(files).length > 0 && !activeFile) {
-      setActiveFile(Object.keys(files)[0]);
+    const fileKeys = Object.keys(files);
+    if (fileKeys.length > 0 && (!activeFile || !fileKeys.includes(activeFile))) {
+      setActiveFile(fileKeys[0]);
+    } else if (fileKeys.length === 0) {
+      setActiveFile("");
     }
   }, [files, activeFile]);
 

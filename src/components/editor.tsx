@@ -21,17 +21,20 @@ import { CompileButton } from "@/components/compile-button";
 import { ViewportToggle } from "@/components/viewport-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { FileExplorer } from "@/components/file-explorer";
+import { EmptyState } from "@/components/empty-state";
 import { useEffect } from "react";
 
 export function Editor() {
-  const { activeTab, setActiveTab, activeFile } = useEditor();
+  const { activeTab, setActiveTab, activeFile, files } = useEditor();
   const { sandpack } = useSandpack();
+
+  const hasFiles = Object.keys(files).length > 0;
 
   useEffect(() => {
     if (activeFile && sandpack.activeFile !== activeFile) {
       sandpack.openFile(activeFile);
     }
-  }, [activeFile, sandpack]);
+  }, [activeFile, sandpack.activeFile, sandpack]);
 
   return (
     <SandboxTabs value={activeTab} onValueChange={setActiveTab}>
@@ -54,15 +57,19 @@ export function Editor() {
         </div>
       </SandboxTabsList>
       <SandboxTabsContent value="code">
-        <ResizablePanelGroup direction="horizontal" className="h-full">
-          <ResizablePanel defaultSize={20} minSize={15} maxSize={40}>
-            <FileExplorer />
-          </ResizablePanel>
-          <ResizableHandle withHandle />
-          <ResizablePanel defaultSize={80}>
-            <SandboxCodeEditor showLineNumbers />
-          </ResizablePanel>
-        </ResizablePanelGroup>
+        {hasFiles ? (
+          <ResizablePanelGroup direction="horizontal" className="h-full">
+            <ResizablePanel defaultSize={20} minSize={15} maxSize={40}>
+              <FileExplorer />
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+            <ResizablePanel defaultSize={80}>
+              <SandboxCodeEditor showLineNumbers />
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        ) : (
+          <EmptyState />
+        )}
       </SandboxTabsContent>
       <SandboxTabsContent value="preview">
         <EmailPreview />

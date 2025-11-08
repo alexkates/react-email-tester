@@ -7,7 +7,7 @@ import { useTheme } from "next-themes";
 
 function HomeContent() {
   const { theme, resolvedTheme } = useTheme();
-  const { files, mounted } = useEditor();
+  const { files, mounted, activeFile } = useEditor();
 
   if (!mounted) return null;
 
@@ -17,9 +17,9 @@ function HomeContent() {
   return (
     <SandboxProvider
       theme={sandpackTheme}
-      files={files}
+      files={Object.keys(files).length > 0 ? files : { "placeholder.tsx": "" }}
       options={{
-        activeFile: Object.keys(files)[0] || "",
+        activeFile: activeFile || "placeholder.tsx",
         visibleFiles: Object.keys(files),
       }}
     >

@@ -19,7 +19,7 @@ import { useState } from "react";
 
 export function FileExplorer() {
   const { sandpack } = useSandpack();
-  const { deleteFile } = useEditor();
+  const { deleteFile, setActiveFile, activeFile } = useEditor();
   const [fileToDelete, setFileToDelete] = useState<string | null>(null);
 
   const visibleFiles = Object.keys(sandpack.files).filter(
@@ -27,6 +27,10 @@ export function FileExplorer() {
       (filePath.endsWith(".jsx") || filePath.endsWith(".tsx")) &&
       !filePath.includes("node_modules")
   );
+
+  const handleFileClick = (filePath: string) => {
+    setActiveFile(filePath);
+  };
 
   const handleDeleteClick = (filePath: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -58,7 +62,7 @@ export function FileExplorer() {
         </div>
         <div className="flex-1 overflow-auto">
           {visibleFiles.map((filePath) => {
-            const isActive = sandpack.activeFile === filePath;
+            const isActive = activeFile === filePath;
             const isLastFile = visibleFiles.length === 1;
             return (
               <div
@@ -67,7 +71,7 @@ export function FileExplorer() {
                   "group/item hover:bg-accent flex cursor-pointer items-center justify-between gap-2 px-3 py-1.5 text-sm transition-colors",
                   isActive && "bg-accent text-accent-foreground font-medium"
                 )}
-                onClick={() => sandpack.openFile(filePath)}
+                onClick={() => handleFileClick(filePath)}
               >
                 <div className="flex min-w-0 flex-1 items-center gap-2">
                   <FileIcon size={14} className="shrink-0" />
