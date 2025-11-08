@@ -37,8 +37,14 @@ export function EmailPreview() {
                   margin: 0;
                   padding: 0;
                   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-                  background: white;
                   color: black;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  min-height: 100vh;
+                }
+                body > * {
+                  max-width: 100%;
                 }
               </style>
             </head>
