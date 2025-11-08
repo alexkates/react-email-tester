@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: "%s | React Email Preview",
   },
   description:
-    "Build, preview, and test React email templates in real-time with an interactive editor and live preview.",
+    "Create and test React Email templates using an interactive editor with live preview.",
   keywords: ["react", "email", "preview", "templates", "editor", "react-email"],
   authors: [{ name: "Alex Kates" }],
   creator: "Alex Kates",
@@ -30,14 +30,14 @@ export const metadata: Metadata = {
     url: "https://react-email-preview.app",
     title: "React Email Preview",
     description:
-      "Build, preview, and test React email templates in real-time with an interactive editor and live preview.",
+      "Create and test React Email templates using an interactive editor with live preview.",
     siteName: "React Email Preview",
   },
   twitter: {
     card: "summary_large_image",
     title: "React Email Preview",
     description:
-      "Build, preview, and test React email templates in real-time with an interactive editor and live preview.",
+      "Create and test React Email templates using an interactive editor with live preview.",
   },
 };
 
