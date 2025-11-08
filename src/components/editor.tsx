@@ -15,17 +15,19 @@ import {
 } from "@/components/ui/resizable";
 import { CodeIcon, AppWindowIcon } from "lucide-react";
 import { EmailPreview } from "@/components/email-preview";
-import { useEditor } from "@/contexts/editor-context";
 import { CompileButton } from "@/components/compile-button";
 import { ViewportToggle } from "@/components/viewport-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { FileExplorer } from "@/components/file-explorer";
 import { EmptyState } from "@/components/empty-state";
+import { useEditor } from "@/contexts/editor-context";
+import { useState } from "react";
 
 export function Editor() {
-  const { activeTab, setActiveTab, files } = useEditor();
+  const { visibleFiles } = useEditor();
+  const [activeTab, setActiveTab] = useState("code");
 
-  const hasFiles = Object.keys(files).length > 0;
+  const hasFiles = visibleFiles.length > 0;
 
   if (!hasFiles) {
     return (
@@ -92,7 +94,11 @@ export function Editor() {
           React Email Tester
         </h1>
         <div className="flex flex-1 justify-end gap-2">
-          {activeTab === "preview" ? <ViewportToggle /> : <CompileButton />}
+          {activeTab === "preview" ? (
+            <ViewportToggle />
+          ) : (
+            <CompileButton onCompileComplete={() => setActiveTab("preview")} />
+          )}
         </div>
       </SandboxTabsList>
       <SandboxTabsContent value="code">

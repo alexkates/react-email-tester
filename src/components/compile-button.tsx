@@ -6,12 +6,17 @@ import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { useSandpack } from "@codesandbox/sandpack-react";
 
-export function CompileButton() {
+export function CompileButton({
+  onCompileComplete,
+}: {
+  onCompileComplete?: () => void;
+}) {
   const { isCompiling, compile } = useEditor();
   const { sandpack } = useSandpack();
 
-  const handleCompile = () => {
-    compile(sandpack.files);
+  const handleCompile = async () => {
+    await compile(sandpack.files);
+    onCompileComplete?.();
   };
 
   return (

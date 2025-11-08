@@ -125,7 +125,7 @@ bun start    # Start production server
 - **Default**: All components in `app/` are server components
 - **Client markers**: Use `"use client"` directive for:
   - Interactive components (onClick, useState, etc.)
-  - Browser APIs (localStorage, window)
+  - Browser APIs (window, etc.)
   - React hooks (useEffect, useContext)
   - Theme components (ThemeToggle, ThemeProvider)
   - All shadcn UI components in `components/ui/`

@@ -14,14 +14,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEditor } from "@/contexts/editor-context";
+import { useSandpack } from "@codesandbox/sandpack-react";
 
 export function NewFileDialog({
   variant = "icon",
 }: {
   variant?: "icon" | "button";
 }) {
-  const { addFile, files } = useEditor();
+  const { sandpack } = useSandpack();
+  const { files, updateFile, setActiveFile } = sandpack;
   const [open, setOpen] = useState(false);
   const [fileName, setFileName] = useState("");
   const [error, setError] = useState("");
@@ -44,7 +45,8 @@ export function NewFileDialog({
       return;
     }
 
-    addFile(filePath, blankTemplate);
+    updateFile(filePath, blankTemplate);
+    setActiveFile(filePath);
 
     setFileName("");
     setError("");

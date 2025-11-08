@@ -2,22 +2,12 @@
 
 import { Editor } from "@/components/editor";
 import { SandboxProvider } from "@/components/ui/shadcn-io/sandbox";
-import { EditorProvider, useEditor } from "@/contexts/editor-context";
+import { EditorProvider } from "@/contexts/editor-context";
 import { useTheme } from "next-themes";
+import { DEFAULT_WELCOME_EMAIL } from "@/lib/default-email";
 
 export default function Home() {
-  return (
-    <EditorProvider>
-      <HomeContent />
-    </EditorProvider>
-  );
-}
-
-function HomeContent() {
   const { theme, resolvedTheme } = useTheme();
-  const { files, mounted } = useEditor();
-
-  if (!mounted) return null;
 
   const sandpackTheme =
     theme === "dark" || resolvedTheme === "dark" ? "dark" : "light";
@@ -25,13 +15,18 @@ function HomeContent() {
   return (
     <SandboxProvider
       theme={sandpackTheme}
-      files={files}
+      files={{
+        "/welcome.tsx": DEFAULT_WELCOME_EMAIL,
+      }}
       options={{
-        activeFile: Object.keys(files)[0],
-        visibleFiles: Object.keys(files),
+        activeFile: "/welcome.tsx",
+        autorun: false,
+        autoReload: false,
       }}
     >
-      <Editor />
+      <EditorProvider>
+        <Editor />
+      </EditorProvider>
     </SandboxProvider>
   );
 }

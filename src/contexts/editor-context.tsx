@@ -1,33 +1,20 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  useEffect,
-} from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 import { compileEmail } from "@/server/compile-email";
-import { useLocalStorage } from "@/hooks/use-local-storage";
 import { CompiledEmail } from "@/types/compiled-email";
 import { ViewportMode } from "@/types/viewport-mode";
+import { useSandpack } from "@codesandbox/sandpack-react";
 
 type EditorContextValue = {
-  activeFile: string | null;
   activePreview: string;
-  activeTab: string;
-  addFile: (filePath: string, content: string) => void;
   compile: (sandpackFiles: Record<string, { code: string }>) => Promise<void>;
   compiledEmails: CompiledEmail[];
-  deleteFile: (filePath: string) => void;
-  files: Record<string, string>;
   isCompiling: boolean;
-  mounted: boolean;
-  setActiveFile: (file: string | null) => void;
   setActivePreview: (fileName: string) => void;
-  setActiveTab: (tab: string) => void;
   setViewportMode: (mode: ViewportMode) => void;
   viewportMode: ViewportMode;
+  visibleFiles: string[];
 };
 
 const EditorContext = createContext<EditorContextValue | undefined>(undefined);
@@ -41,58 +28,14 @@ export const useEditor = () => {
 };
 
 export function EditorProvider({ children }: { children: React.ReactNode }) {
-  const [mounted, setMounted] = useState(false);
-  const [activeTab, setActiveTab] = useState("code");
-  const [files, setFiles] = useLocalStorage<Record<string, string>>(
-    "react-email-preview-files",
-    {}
-  );
-  const [activeFile, setActiveFile] = useState<string | null>(null);
+  const { sandpack } = useSandpack();
   const [compiledEmails, setCompiledEmails] = useState<CompiledEmail[]>([]);
   const [activePreview, setActivePreview] = useState<string>("");
   const [isCompiling, setIsCompiling] = useState(false);
   const [viewportMode, setViewportMode] = useState<ViewportMode>("desktop");
 
-  useEffect(() => setMounted(true), []);
-  useEffect(() => {
-    const fileKeys = Object.keys(files);
-    if (fileKeys.length === 0) {
-      setActiveFile(null);
-    } else if (!activeFile || !fileKeys.includes(activeFile)) {
-      setActiveFile(fileKeys[0]);
-    }
-  }, [files, activeFile]);
-
-  const addFile = useCallback(
-    (filePath: string, content: string) => {
-      setFiles((prev) => ({
-        ...prev,
-        [filePath]: content,
-      }));
-      setActiveFile(filePath);
-      setActiveTab("code");
-    },
-    [setFiles]
-  );
-
-  const deleteFile = useCallback(
-    (filePath: string) => {
-      setFiles((prev) => {
-        const newFiles = { ...prev };
-        delete newFiles[filePath];
-        return newFiles;
-      });
-
-      if (activeFile === filePath) {
-        const remainingFiles = Object.keys(files).filter((f) => f !== filePath);
-        if (remainingFiles.length > 0) {
-          setActiveFile(remainingFiles[0]);
-        } else {
-          setActiveFile(null);
-        }
-      }
-    },
-    [activeFile, files, setFiles]
+  const visibleFiles = Object.keys(sandpack.files).filter((path) =>
+    path.endsWith(".tsx")
   );
 
   const compile = useCallback(
@@ -123,7 +66,6 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
       }
 
       setIsCompiling(false);
-      setActiveTab("preview");
     },
     [activePreview]
   );
@@ -131,21 +73,14 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
   return (
     <EditorContext.Provider
       value={{
-        activeFile,
         activePreview,
-        activeTab,
-        addFile,
         compile,
         compiledEmails,
-        deleteFile,
-        files,
         isCompiling,
-        mounted,
-        setActiveFile,
         setActivePreview,
-        setActiveTab,
         setViewportMode,
         viewportMode,
+        visibleFiles,
       }}
     >
       {children}

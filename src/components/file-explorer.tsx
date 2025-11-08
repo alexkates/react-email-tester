@@ -2,6 +2,7 @@
 
 import { FileIcon, Trash2Icon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useSandpack } from "@codesandbox/sandpack-react";
 import { useEditor } from "@/contexts/editor-context";
 import {
   AlertDialog,
@@ -17,10 +18,10 @@ import { NewFileDialog } from "@/components/new-file-dialog";
 import { useState } from "react";
 
 export function FileExplorer() {
-  const { deleteFile, setActiveFile, activeFile, files } = useEditor();
+  const { sandpack } = useSandpack();
+  const { activeFile, setActiveFile, deleteFile } = sandpack;
+  const { visibleFiles } = useEditor();
   const [fileToDelete, setFileToDelete] = useState<string | null>(null);
-
-  const visibleFiles = Object.keys(files);
 
   const handleFileClick = (filePath: string) => {
     setActiveFile(filePath);
