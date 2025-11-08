@@ -19,7 +19,7 @@ type CompiledEmail = {
 type ViewportMode = "desktop" | "mobile";
 
 type EditorContextValue = {
-  activeFile: string;
+  activeFile: string | null;
   activePreview: string;
   activeTab: string;
   addFile: (filePath: string, content: string) => void;
@@ -29,15 +29,11 @@ type EditorContextValue = {
   files: Record<string, string>;
   isCompiling: boolean;
   mounted: boolean;
-  setActiveFile: (file: string) => void;
+  setActiveFile: (file: string | null) => void;
   setActivePreview: (fileName: string) => void;
   setActiveTab: (tab: string) => void;
-  setFiles: (
-    files:
-      | Record<string, string>
-      | ((prev: Record<string, string>) => Record<string, string>)
-  ) => void;
   setViewportMode: (mode: ViewportMode) => void;
+  updateFile: (filePath: string, content: string) => void;
   viewportMode: ViewportMode;
 };
 
@@ -60,7 +56,7 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
     "react-email-preview-files",
     DEFAULT_FILES
   );
-  const [activeFile, setActiveFile] = useState<string>("");
+  const [activeFile, setActiveFile] = useState<string | null>(null);
   const [compiledEmails, setCompiledEmails] = useState<CompiledEmail[]>([]);
   const [activePreview, setActivePreview] = useState<string>("");
   const [isCompiling, setIsCompiling] = useState(false);
@@ -92,6 +88,16 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
     [setFiles]
   );
 
+  const updateFile = useCallback(
+    (filePath: string, content: string) => {
+      setFiles((prev) => ({
+        ...prev,
+        [filePath]: content,
+      }));
+    },
+    [setFiles]
+  );
+
   const deleteFile = useCallback(
     (filePath: string) => {
       setFiles((prev) => {
@@ -104,6 +110,8 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
         const remainingFiles = Object.keys(files).filter((f) => f !== filePath);
         if (remainingFiles.length > 0) {
           setActiveFile(remainingFiles[0]);
+        } else {
+          setActiveFile(null);
         }
       }
     },
@@ -150,7 +158,6 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
         activeTab,
         setActiveTab,
         files,
-        setFiles,
         activeFile,
         setActiveFile,
         isCompiling,
@@ -159,6 +166,7 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
         setActivePreview,
         compile,
         addFile,
+        updateFile,
         deleteFile,
         viewportMode,
         setViewportMode,

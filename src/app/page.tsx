@@ -7,19 +7,24 @@ import { useTheme } from "next-themes";
 
 function HomeContent() {
   const { theme, resolvedTheme } = useTheme();
-  const { files, mounted, activeFile } = useEditor();
+  const { files, mounted } = useEditor();
 
   if (!mounted) return null;
 
+  const hasFiles = Object.keys(files).length > 0;
   const sandpackTheme =
     theme === "dark" || resolvedTheme === "dark" ? "dark" : "light";
+
+  if (!hasFiles) {
+    return <Editor />;
+  }
 
   return (
     <SandboxProvider
       theme={sandpackTheme}
-      files={Object.keys(files).length > 0 ? files : { "placeholder.tsx": "" }}
+      files={files}
       options={{
-        activeFile: activeFile || "placeholder.tsx",
+        activeFile: Object.keys(files)[0],
         visibleFiles: Object.keys(files),
       }}
     >

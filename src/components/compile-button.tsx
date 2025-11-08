@@ -2,15 +2,29 @@
 
 import { SendIcon } from "lucide-react";
 import { useEditor } from "@/contexts/editor-context";
-import { useSandpack } from "@codesandbox/sandpack-react";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
+import { useSandpack } from "@codesandbox/sandpack-react";
 
 export function CompileButton() {
-  const { isCompiling, compile } = useEditor();
+  const { isCompiling, compile, updateFile } = useEditor();
   const { sandpack } = useSandpack();
 
   const handleCompile = () => {
+    // Sync Sandpack changes back to EditorContext (and localStorage)
+    Object.keys(sandpack.files).forEach((filePath) => {
+      if (
+        (filePath.endsWith(".jsx") || filePath.endsWith(".tsx")) &&
+        !filePath.includes("node_modules")
+      ) {
+        const content = sandpack.files[filePath]?.code;
+        if (content) {
+          updateFile(filePath, content);
+        }
+      }
+    });
+
+    // Compile with current Sandpack files
     compile(sandpack.files);
   };
 

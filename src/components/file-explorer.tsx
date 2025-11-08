@@ -1,6 +1,5 @@
 "use client";
 
-import { useSandpack } from "@codesandbox/sandpack-react";
 import { FileIcon, Trash2Icon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useEditor } from "@/contexts/editor-context";
@@ -18,15 +17,10 @@ import { NewFileDialog } from "@/components/new-file-dialog";
 import { useState } from "react";
 
 export function FileExplorer() {
-  const { sandpack } = useSandpack();
-  const { deleteFile, setActiveFile, activeFile } = useEditor();
+  const { deleteFile, setActiveFile, activeFile, files } = useEditor();
   const [fileToDelete, setFileToDelete] = useState<string | null>(null);
 
-  const visibleFiles = Object.keys(sandpack.files).filter(
-    (filePath) =>
-      (filePath.endsWith(".jsx") || filePath.endsWith(".tsx")) &&
-      !filePath.includes("node_modules")
-  );
+  const visibleFiles = Object.keys(files);
 
   const handleFileClick = (filePath: string) => {
     setActiveFile(filePath);
@@ -40,7 +34,6 @@ export function FileExplorer() {
   const confirmDelete = () => {
     if (fileToDelete) {
       deleteFile(fileToDelete);
-      sandpack.deleteFile(fileToDelete);
       setFileToDelete(null);
     }
   };
@@ -63,7 +56,6 @@ export function FileExplorer() {
         <div className="flex-1 overflow-auto">
           {visibleFiles.map((filePath) => {
             const isActive = activeFile === filePath;
-            const isLastFile = visibleFiles.length === 1;
             return (
               <div
                 key={filePath}
@@ -77,19 +69,17 @@ export function FileExplorer() {
                   <FileIcon size={14} className="shrink-0" />
                   <span className="truncate">{getFileName(filePath)}</span>
                 </div>
-                {!isLastFile && (
-                  <button
-                    onClick={(e) => handleDeleteClick(filePath, e)}
-                    className={cn(
-                      "shrink-0 rounded p-1 opacity-0 transition-all group-hover/item:opacity-100",
-                      "hover:bg-destructive/10 hover:text-destructive",
-                      "focus:ring-ring focus:opacity-100 focus:ring-2 focus:outline-none"
-                    )}
-                    aria-label={`Delete ${getFileName(filePath)}`}
-                  >
-                    <Trash2Icon size={14} />
-                  </button>
-                )}
+                <button
+                  onClick={(e) => handleDeleteClick(filePath, e)}
+                  className={cn(
+                    "shrink-0 rounded p-1 opacity-0 transition-all group-hover/item:opacity-100",
+                    "hover:bg-destructive/10 hover:text-destructive",
+                    "focus:ring-ring focus:opacity-100 focus:ring-2 focus:outline-none"
+                  )}
+                  aria-label={`Delete ${getFileName(filePath)}`}
+                >
+                  <Trash2Icon size={14} />
+                </button>
               </div>
             );
           })}

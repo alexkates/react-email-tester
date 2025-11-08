@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useSandpack } from "@codesandbox/sandpack-react";
 import { FilePlusIcon } from "lucide-react";
 import {
   Dialog,
@@ -22,8 +21,7 @@ export function NewFileDialog({
 }: {
   variant?: "icon" | "button";
 }) {
-  const { sandpack } = useSandpack();
-  const { addFile } = useEditor();
+  const { addFile, files } = useEditor();
   const [open, setOpen] = useState(false);
   const [fileName, setFileName] = useState("");
   const [error, setError] = useState("");
@@ -41,13 +39,12 @@ export function NewFileDialog({
 
     const filePath = `/${finalFileName}`;
 
-    if (sandpack.files[filePath]) {
+    if (files[filePath]) {
       setError("File already exists");
       return;
     }
 
     addFile(filePath, blankTemplate);
-    sandpack.addFile(filePath, blankTemplate);
 
     setFileName("");
     setError("");
