@@ -13,31 +13,46 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const title = "React Email Preview";
+const description =
+  "Create and test React Email templates using an interactive editor with live preview.";
+const url = "https://react-email-preview.app";
+const images = ["/opengraph-image.png"];
+const keywords = [
+  "react",
+  "email",
+  "preview",
+  "templates",
+  "editor",
+  "react-email",
+];
+
 export const metadata: Metadata = {
+  metadataBase: new URL(url),
   title: {
-    default: "React Email Preview",
-    template: "%s | React Email Preview",
+    default: title,
+    template: `%s | ${title}`,
   },
-  description:
-    "Create and test React Email templates using an interactive editor with live preview.",
-  keywords: ["react", "email", "preview", "templates", "editor", "react-email"],
+  description,
+  keywords,
   authors: [{ name: "Alex Kates" }],
   creator: "Alex Kates",
-  metadataBase: new URL("https://react-email-preview.app"),
   openGraph: {
+    title,
+    description,
     type: "website",
+    siteName: title,
+    images,
+    url,
     locale: "en_US",
-    url: "https://react-email-preview.app",
-    title: "React Email Preview",
-    description:
-      "Create and test React Email templates using an interactive editor with live preview.",
-    siteName: "React Email Preview",
   },
   twitter: {
     card: "summary_large_image",
-    title: "React Email Preview",
-    description:
-      "Create and test React Email templates using an interactive editor with live preview.",
+    title,
+    description,
+    images,
+    creator: "@thealexkates",
+    site: "@thealexkates",
   },
 };
 
