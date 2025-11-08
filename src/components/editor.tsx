@@ -116,12 +116,12 @@ export function Editor() {
             </Button>
           </ButtonGroup>
         </div>
-        <h1 className="text-primary text-xl font-semibold">
+        <h1 className="text-primary hidden text-xl font-semibold md:block">
           React Email Tester
         </h1>
         <div className="flex flex-1 justify-end gap-2">
           {activeTab === "preview" ? (
-            <ViewportToggle />
+            <ViewportToggle className="hidden md:flex" />
           ) : (
             <CompileButton onCompileComplete={() => setActiveTab("preview")} />
           )}
@@ -129,10 +129,15 @@ export function Editor() {
       </SandboxTabsList>
       <SandboxTabsContent value="code">
         <ResizablePanelGroup direction="horizontal" className="h-full">
-          <ResizablePanel defaultSize={20} minSize={15} maxSize={40}>
+          <ResizablePanel
+            defaultSize={20}
+            minSize={15}
+            maxSize={40}
+            className="hidden md:block"
+          >
             <FileExplorer />
           </ResizablePanel>
-          <ResizableHandle withHandle />
+          <ResizableHandle withHandle className="hidden md:flex" />
           <ResizablePanel defaultSize={80}>
             <SandboxCodeEditor showLineNumbers />
           </ResizablePanel>

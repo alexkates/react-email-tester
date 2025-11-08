@@ -6,11 +6,11 @@ import { ButtonGroup } from "@/components/ui/button-group";
 import { useEditor } from "@/contexts/editor-context";
 import { cn } from "@/lib/utils";
 
-export function ViewportToggle() {
+export function ViewportToggle({ className }: { className?: string }) {
   const { viewportMode, setViewportMode } = useEditor();
 
   return (
-    <ButtonGroup>
+    <ButtonGroup className={className}>
       <Button
         variant="outline"
         size="sm"

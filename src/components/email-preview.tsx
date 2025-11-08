@@ -66,7 +66,7 @@ export function EmailPreview() {
     <div className="flex h-full flex-col">
       {/* Preview file tabs */}
       {compiledEmails.length > 0 && (
-        <div className="bg-secondary/30 flex gap-1 border-b p-2">
+        <div className="bg-secondary/30 hidden gap-1 border-b p-2 md:flex">
           {compiledEmails.map((email) => (
             <Button
               key={email.fileName}
