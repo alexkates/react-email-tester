@@ -88,6 +88,66 @@ import { compileEmail } from "@/server/compile-email";
 - **`src/server/`**: Server-side compilation and data processing
 - **`src/types/`**: TypeScript type definitions and interfaces
 
+## Key Application Patterns
+
+### State Management Architecture
+
+The application uses React Context for global state management:
+
+**EditorContext** (`src/contexts/editor-context.tsx`):
+
+- Manages file compilation state and viewport mode
+- Provides `compile()` function that processes Sandpack files
+- Tracks `compiledEmails` array with HTML/text output
+- Controls `activePreview` file selection
+- Must be wrapped inside `SandpackProvider` to access Sandpack state
+
+**SandboxProvider** (from `@codesandbox/sandpack-react`):
+
+- Manages code editor state and file system
+- Provides file content access via `sandpack.files`
+- Controls syntax highlighting and code editing
+
+Component hierarchy:
+
+```tsx
+<SandboxProvider>
+  {" "}
+  // Sandpack code editor state
+  <EditorProvider>
+    {" "}
+    // Email compilation state
+    <Editor /> // Main UI
+  </EditorProvider>
+</SandboxProvider>
+```
+
+### Email Compilation Flow
+
+1. User writes React email components in Sandpack editor
+2. Clicks "Compile" button (triggers `compile()` from EditorContext)
+3. `compileEmail()` server function receives file code
+4. esbuild bundles and transforms JSX → executable JavaScript
+5. React component renders → HTML via `@react-email/render`
+6. Returns `CompiledEmail` with `html` and `plainText` outputs
+7. Preview components display compiled results
+
+Key files:
+
+- `src/server/compile-email.ts`: esbuild compilation logic
+- `src/contexts/editor-context.tsx`: Orchestrates compilation
+- `src/components/compile-button.tsx`: UI trigger
+- `src/components/email-preview.tsx`: Display results
+
+### File Management
+
+Files are managed through Sandpack's file system:
+
+- Only `.tsx` and `.jsx` files are visible in the file explorer
+- Initial state includes `/welcome.tsx` (from `DEFAULT_WELCOME_EMAIL`)
+- `visibleFiles` filters Sandpack files by extension
+- New files created via dialog component with validation
+
 ## Styling Conventions
 
 ### Tailwind v4 Configuration
@@ -112,7 +172,7 @@ All UI components use:
 ```typescript
 import { cn } from "@/lib/utils"; // twMerge + clsx
 
-<Component className={cn("base-styles", conditionalClasses, className)} />;
+<Component className={cn("base-styles", conditionalClasses, className)} />
 ```
 
 ### Data Attributes
@@ -123,6 +183,13 @@ Components use `data-slot` for consistent styling hooks:
 <button data-slot="button" />
 <div data-slot="card-header" />
 ```
+
+### Styling Classes Order
+
+- Order: Layout → Spacing → Colors → Typography → Effects
+- Use semantic color tokens (`bg-primary`, `text-foreground`) not raw colors
+- Responsive modifiers: `md:text-sm` (mobile-first)
+- Dark mode: `dark:bg-input/30` (class-based strategy)
 
 ## UI Component Patterns (shadcn/ui)
 
@@ -186,7 +253,7 @@ bun start    # Start production server
 
 ### Theme Implementation
 
-Root layout sets up theming:
+Root layout (`src/app/layout.tsx`) sets up theming:
 
 ```tsx
 <html suppressHydrationWarning>
@@ -197,6 +264,8 @@ Root layout sets up theming:
   </ThemeProvider>
 </html>
 ```
+
+Theme switching is handled by `next-themes` with the `ThemeToggle` component (`src/components/theme-toggle.tsx`).
 
 ## Code Conventions
 
@@ -219,19 +288,21 @@ Root layout sets up theming:
 - Comments should explain **why**, not **what**: The code itself should be self-documenting
 - Use comments for complex logic, non-obvious decisions, or important context that can't be expressed in code
 
-### Styling Classes
+### Imports
 
-- Order: Layout → Spacing → Colors → Typography → Effects
-- Use semantic color tokens (`bg-primary`, `text-foreground`) not raw colors
-- Responsive modifiers: `md:text-sm` (mobile-first)
-- Dark mode: `dark:bg-input/30` (class-based strategy)
+- Always use `@/` path alias for imports within the project
+- Group imports: React/Next → Third-party → Internal (`@/components`, `@/lib`, etc.)
+- Use named imports for clarity: `import { Button } from "@/components/ui/button"`
 
 ## Key Files Reference
 
 - **`components.json`**: shadcn/ui configuration (style: "new-york")
 - **`src/app/layout.tsx`**: Root layout with theme + header structure
+- **`src/app/page.tsx`**: Home page with SandboxProvider and EditorProvider setup
 - **`src/lib/utils.ts`**: `cn()` utility for className merging
 - **`src/app/globals.css`**: Theme variables and Tailwind imports
+- **`src/lib/default-email.ts`**: Default welcome email template
+- **`src/server/compile-email.ts`**: Server-side email compilation with esbuild
 
 ## Common Patterns
 
@@ -261,5 +332,34 @@ import { Button } from "@/components/ui/button";
 export function InteractiveComponent() {
   const [state, setState] = useState();
   // ... logic
+}
+```
+
+### Using EditorContext
+
+```typescript
+"use client";
+import { useEditor } from "@/contexts/editor-context";
+
+export function MyComponent() {
+  const { compiledEmails, compile, isCompiling } = useEditor();
+  // Access editor state and actions
+}
+```
+
+### Creating New Email Components
+
+Email components should be standalone React components using `@react-email/components`:
+
+```typescript
+import { Html, Button, Text } from "@react-email/components";
+
+export default function MyEmail() {
+  return (
+    <Html>
+      <Text>Email content</Text>
+      <Button href="https://example.com">Click me</Button>
+    </Html>
+  );
 }
 ```
