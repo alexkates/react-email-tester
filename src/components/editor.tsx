@@ -12,7 +12,7 @@ import {
   ResizablePanel,
   ResizableHandle,
 } from "@/components/ui/resizable";
-import { CodeIcon, AppWindowIcon } from "lucide-react";
+import { CodeIcon, AppWindowIcon, GithubIcon } from "lucide-react";
 import { EmailPreview } from "@/components/email-preview";
 import { CompileButton } from "@/components/compile-button";
 import { ViewportToggle } from "@/components/viewport-toggle";
@@ -43,7 +43,15 @@ export function Editor() {
           <EmptyState />
         </div>
         <div className="flex items-center justify-between border-t p-4">
-          <div />
+          <a
+            href="https://github.com/alexkates/react-email-tester"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="View source on GitHub"
+          >
+            <GithubIcon size={18} />
+          </a>
           <p className="text-muted-foreground text-sm">
             Built with{" "}
             <a
@@ -134,7 +142,15 @@ export function Editor() {
         <EmailPreview />
       </SandboxTabsContent>
       <SandboxFooter>
-        <div />
+        <a
+          href="https://github.com/alexkates/react-email-tester"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-muted-foreground hover:text-foreground transition-colors"
+          aria-label="View source on GitHub"
+        >
+          <GithubIcon size={18} />
+        </a>
         <p className="text-muted-foreground text-sm">
           Built with{" "}
           <a

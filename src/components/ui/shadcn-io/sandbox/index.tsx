@@ -207,11 +207,13 @@ export type SandboxCodeEditorProps = CodeEditorProps;
 
 export const SandboxCodeEditor = ({
   showTabs = false,
+  showRunButton = false,
   className,
   ...props
 }: SandboxCodeEditorProps): ReactNode => (
   <SandpackCodeEditor
     showTabs={showTabs}
+    showRunButton={showRunButton}
     className={cn("h-full!", className)}
     {...props}
   />
