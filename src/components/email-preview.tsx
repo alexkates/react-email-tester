@@ -2,6 +2,7 @@
 
 import { useEditor } from "@/contexts/editor-context";
 import { Button } from "@/components/ui/button";
+import { CompileButton } from "@/components/compile-button";
 import { FileIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useEffect, useRef } from "react";
@@ -103,11 +104,9 @@ export function EmailPreview() {
           </div>
         ) : (
           <div className="text-muted-foreground flex h-full items-center justify-center">
-            <div className="text-center">
-              <p className="mb-2 text-sm">No preview available</p>
-              <p className="text-xs">
-                Click "Compile" to generate email preview
-              </p>
+            <div className="flex flex-col items-center gap-4 text-center">
+              <p className="text-sm">Compile your template to preview it</p>
+              <CompileButton />
             </div>
           </div>
         )}

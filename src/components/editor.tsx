@@ -4,7 +4,6 @@ import {
   SandboxCodeEditor,
   SandboxTabs,
   SandboxTabsList,
-  SandboxTabsTrigger,
   SandboxTabsContent,
   SandboxFooter,
 } from "@/components/ui/shadcn-io/sandbox";
@@ -22,6 +21,9 @@ import { FileExplorer } from "@/components/file-explorer";
 import { EmptyState } from "@/components/empty-state";
 import { useEditor } from "@/contexts/editor-context";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { cn } from "@/lib/utils";
 
 export function Editor() {
   const { visibleFiles } = useEditor();
@@ -81,14 +83,30 @@ export function Editor() {
     <SandboxTabs value={activeTab} onValueChange={setActiveTab}>
       <SandboxTabsList className="justify-between">
         <div className="flex flex-1 justify-start">
-          <SandboxTabsTrigger value="code">
-            <CodeIcon size={14} />
-            Code
-          </SandboxTabsTrigger>
-          <SandboxTabsTrigger value="preview">
-            <AppWindowIcon size={14} />
-            Preview
-          </SandboxTabsTrigger>
+          <ButtonGroup>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setActiveTab("code")}
+              className={cn(
+                activeTab === "code" && "bg-accent text-accent-foreground"
+              )}
+            >
+              <CodeIcon size={14} />
+              Code
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setActiveTab("preview")}
+              className={cn(
+                activeTab === "preview" && "bg-accent text-accent-foreground"
+              )}
+            >
+              <AppWindowIcon size={14} />
+              Preview
+            </Button>
+          </ButtonGroup>
         </div>
         <h1 className="text-primary text-xl font-semibold">
           React Email Tester
