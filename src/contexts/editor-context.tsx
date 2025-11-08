@@ -1,6 +1,5 @@
 "use client";
 
-import { useSandpack } from "@codesandbox/sandpack-react";
 import {
   createContext,
   useContext,
@@ -10,6 +9,7 @@ import {
 } from "react";
 import { compileEmail } from "@/server/compile-email";
 import { useLocalStorage } from "@/hooks/use-local-storage";
+import { DEFAULT_WELCOME_EMAIL } from "@/lib/default-email";
 import * as React from "react";
 
 type CompiledEmail = {
@@ -24,7 +24,7 @@ type EditorContextValue = {
   activePreview: string;
   activeTab: string;
   addFile: (filePath: string, content: string) => void;
-  compile: () => Promise<void>;
+  compile: (sandpackFiles: Record<string, { code: string }>) => Promise<void>;
   compiledEmails: CompiledEmail[];
   deleteFile: (filePath: string) => void;
   files: Record<string, string>;
@@ -42,6 +42,8 @@ type EditorContextValue = {
   viewportMode: ViewportMode;
 };
 
+const DEFAULT_FILES = { "welcome.tsx": DEFAULT_WELCOME_EMAIL };
+
 const EditorContext = createContext<EditorContextValue | undefined>(undefined);
 
 export const useEditor = () => {
@@ -53,12 +55,11 @@ export const useEditor = () => {
 };
 
 export function EditorProvider({ children }: { children: React.ReactNode }) {
-  const { sandpack } = useSandpack();
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("code");
   const [files, setFiles] = useLocalStorage<Record<string, string>>(
     "react-email-preview-files",
-    {}
+    DEFAULT_FILES
   );
   const [activeFile, setActiveFile] = useState<string>("");
   const [compiledEmails, setCompiledEmails] = useState<CompiledEmail[]>([]);
@@ -74,23 +75,16 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
     }
   }, [files, activeFile]);
 
-  useEffect(() => {
-    if (activeFile && sandpack.activeFile !== activeFile) {
-      sandpack.openFile(activeFile);
-    }
-  }, [activeFile, sandpack]);
-
   const addFile = useCallback(
     (filePath: string, content: string) => {
       setFiles((prev) => ({
         ...prev,
         [filePath]: content,
       }));
-      sandpack.addFile(filePath, content);
       setActiveFile(filePath);
       setActiveTab("code");
     },
-    [sandpack, setFiles]
+    [setFiles]
   );
 
   const deleteFile = useCallback(
@@ -111,35 +105,38 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
     [activeFile, files, setFiles]
   );
 
-  const compile = useCallback(async () => {
-    setIsCompiling(true);
+  const compile = useCallback(
+    async (sandpackFiles: Record<string, { code: string }>) => {
+      setIsCompiling(true);
 
-    const emailFiles = Object.keys(sandpack.files).filter(
-      (path) =>
-        (path.endsWith(".jsx") || path.endsWith(".tsx")) &&
-        !path.includes("node_modules")
-    );
+      const emailFiles = Object.keys(sandpackFiles).filter(
+        (path) =>
+          (path.endsWith(".jsx") || path.endsWith(".tsx")) &&
+          !path.includes("node_modules")
+      );
 
-    const compiledResults = await Promise.all(
-      emailFiles.map(async (filePath) => {
-        const emailContent = sandpack.files[filePath]?.code || "";
-        const html = await compileEmail(emailContent);
-        return {
-          fileName: filePath.replace("/", ""),
-          html,
-        };
-      })
-    );
+      const compiledResults = await Promise.all(
+        emailFiles.map(async (filePath) => {
+          const emailContent = sandpackFiles[filePath]?.code || "";
+          const html = await compileEmail(emailContent);
+          return {
+            fileName: filePath.replace("/", ""),
+            html,
+          };
+        })
+      );
 
-    setCompiledEmails(compiledResults);
+      setCompiledEmails(compiledResults);
 
-    if (compiledResults.length > 0 && !activePreview) {
-      setActivePreview(compiledResults[0].fileName);
-    }
+      if (compiledResults.length > 0 && !activePreview) {
+        setActivePreview(compiledResults[0].fileName);
+      }
 
-    setIsCompiling(false);
-    setActiveTab("preview");
-  }, [sandpack.files, activePreview]);
+      setIsCompiling(false);
+      setActiveTab("preview");
+    },
+    [activePreview]
+  );
 
   return (
     <EditorContext.Provider

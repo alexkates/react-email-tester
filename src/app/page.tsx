@@ -2,16 +2,12 @@
 
 import { Editor } from "@/components/editor";
 import { SandboxProvider } from "@/components/ui/shadcn-io/sandbox";
-import { EditorProvider } from "@/contexts/editor-context";
-import { useLocalStorage } from "@/hooks/use-local-storage";
+import { EditorProvider, useEditor } from "@/contexts/editor-context";
 import { useTheme } from "next-themes";
 
-export default function Home() {
+function HomeContent() {
   const { theme } = useTheme();
-  const [files] = useLocalStorage<Record<string, string>>(
-    "react-email-preview-files",
-    {}
-  );
+  const { files } = useEditor();
 
   return (
     <SandboxProvider
@@ -22,9 +18,15 @@ export default function Home() {
         visibleFiles: Object.keys(files),
       }}
     >
-      <EditorProvider>
-        <Editor />
-      </EditorProvider>
+      <Editor />
     </SandboxProvider>
+  );
+}
+
+export default function Home() {
+  return (
+    <EditorProvider>
+      <HomeContent />
+    </EditorProvider>
   );
 }

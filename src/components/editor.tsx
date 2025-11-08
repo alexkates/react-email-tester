@@ -16,13 +16,22 @@ import {
 import { CodeIcon, AppWindowIcon } from "lucide-react";
 import { EmailPreview } from "@/components/email-preview";
 import { useEditor } from "@/contexts/editor-context";
+import { useSandpack } from "@codesandbox/sandpack-react";
 import { CompileButton } from "@/components/compile-button";
 import { ViewportToggle } from "@/components/viewport-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { FileExplorer } from "@/components/file-explorer";
+import { useEffect } from "react";
 
 export function Editor() {
-  const { activeTab, setActiveTab } = useEditor();
+  const { activeTab, setActiveTab, activeFile } = useEditor();
+  const { sandpack } = useSandpack();
+
+  useEffect(() => {
+    if (activeFile && sandpack.activeFile !== activeFile) {
+      sandpack.openFile(activeFile);
+    }
+  }, [activeFile, sandpack]);
 
   return (
     <SandboxTabs value={activeTab} onValueChange={setActiveTab}>
