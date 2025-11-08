@@ -22,11 +22,12 @@ import { ViewportToggle } from "@/components/viewport-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { FileExplorer } from "@/components/file-explorer";
 import { EmptyState } from "@/components/empty-state";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export function Editor() {
-  const { activeTab, setActiveTab, activeFile, files } = useEditor();
+  const { activeTab, setActiveTab, activeFile, files, setFiles } = useEditor();
   const { sandpack } = useSandpack();
+  const syncTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   const hasFiles = Object.keys(files).length > 0;
 
@@ -35,6 +36,45 @@ export function Editor() {
       sandpack.openFile(activeFile);
     }
   }, [activeFile, sandpack.activeFile, sandpack]);
+
+  useEffect(() => {
+    if (syncTimeoutRef.current) {
+      clearTimeout(syncTimeoutRef.current);
+    }
+
+    syncTimeoutRef.current = setTimeout(() => {
+      const updatedFiles: Record<string, string> = {};
+      let hasChanges = false;
+
+      Object.keys(sandpack.files).forEach((filePath) => {
+        if (
+          (filePath.endsWith(".jsx") || filePath.endsWith(".tsx")) &&
+          !filePath.includes("node_modules")
+        ) {
+          const sandpackContent = sandpack.files[filePath].code;
+          const contextContent = files[filePath];
+
+          if (sandpackContent !== contextContent) {
+            updatedFiles[filePath] = sandpackContent;
+            hasChanges = true;
+          }
+        }
+      });
+
+      if (hasChanges) {
+        setFiles((prev) => ({
+          ...prev,
+          ...updatedFiles,
+        }));
+      }
+    }, 500);
+
+    return () => {
+      if (syncTimeoutRef.current) {
+        clearTimeout(syncTimeoutRef.current);
+      }
+    };
+  }, [sandpack.files, files, setFiles]);
 
   return (
     <SandboxTabs value={activeTab} onValueChange={setActiveTab}>
