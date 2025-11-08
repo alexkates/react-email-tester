@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const title = "React Email Preview";
+const title = "React Email Tester";
 const description =
   "Create and test React Email templates using an interactive editor with live preview.";
 const url = "https://react-email-tester.app";

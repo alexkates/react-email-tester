@@ -36,7 +36,7 @@ export function Editor() {
       <div className="flex h-full flex-col">
         <div className="border-b p-4">
           <h1 className="text-primary text-center text-xl font-semibold">
-            React Email Preview
+            React Email Tester
           </h1>
         </div>
         <div className="flex-1">

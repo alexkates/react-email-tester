@@ -1,8 +1,8 @@
-# React Email Preview - AI Coding Agent Instructions
+# React Email Tester - AI Coding Agent Instructions
 
 ## Project Overview
 
-Next.js 16 application with React 19 for email preview functionality. Uses App Router architecture with server/client component patterns.
+Next.js 16 application with React 19 for email testing functionality. Uses App Router architecture with server/client component patterns.
 
 ## Tech Stack & Key Dependencies
 

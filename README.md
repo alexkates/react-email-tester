@@ -1,4 +1,4 @@
-# React Email Preview
+# React Email Tester
 
 A modern, browser-based email template editor and previewer built with Next.js 16, React 19, and [react-email](https://react.email). Write React email components with instant visual feedback in multiple viewport sizes.
 
