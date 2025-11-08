@@ -5,6 +5,14 @@ import { SandboxProvider } from "@/components/ui/shadcn-io/sandbox";
 import { EditorProvider, useEditor } from "@/contexts/editor-context";
 import { useTheme } from "next-themes";
 
+export default function Home() {
+  return (
+    <EditorProvider>
+      <HomeContent />
+    </EditorProvider>
+  );
+}
+
 function HomeContent() {
   const { theme, resolvedTheme } = useTheme();
   const { files, mounted } = useEditor();
@@ -25,13 +33,5 @@ function HomeContent() {
     >
       <Editor />
     </SandboxProvider>
-  );
-}
-
-export default function Home() {
-  return (
-    <EditorProvider>
-      <HomeContent />
-    </EditorProvider>
   );
 }

@@ -89,7 +89,7 @@ export function Editor() {
           </SandboxTabsTrigger>
         </div>
         <h1 className="text-primary text-xl font-semibold">
-          React Email Preview
+          React Email Tester
         </h1>
         <div className="flex flex-1 justify-end gap-2">
           {activeTab === "preview" ? <ViewportToggle /> : <CompileButton />}
