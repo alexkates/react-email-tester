@@ -6,10 +6,6 @@ import * as React from "react";
 import * as ReactEmailComponents from "@react-email/components";
 import { jsx, jsxs, Fragment } from "react/jsx-runtime";
 
-/**
- * Compiles user's email template code into HTML using esbuild and React Email.
- * Simple approach: let esbuild bundle everything, then execute and render.
- */
 export async function compileEmail(code: string): Promise<string> {
   try {
     const buildResult = await build({
@@ -38,8 +34,6 @@ export async function compileEmail(code: string): Promise<string> {
       throw new Error("esbuild produced no output");
     }
 
-    console.log("Compiled code:", compiledCode.substring(0, 500));
-
     const customRequire = (moduleName: string) => {
       if (moduleName === "react") {
         return React;
@@ -58,9 +52,6 @@ export async function compileEmail(code: string): Promise<string> {
 
     const fn = new Function("require", "module", "exports", compiledCode);
     fn(customRequire, module, exports);
-
-    console.log("Module exports:", module.exports);
-    console.log("Exports keys:", Object.keys(module.exports));
 
     const EmailComponent =
       module.exports.default ||

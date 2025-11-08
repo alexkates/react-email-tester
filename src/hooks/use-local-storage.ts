@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
-  // State to store our value
-  // Pass initial state function to useState so logic is only executed once
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       // Check if we're in the browser (client-side)
@@ -18,10 +16,8 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     }
   });
 
-  // useEffect to update local storage when the state changes
   useEffect(() => {
     try {
-      // Check if we're in the browser (client-side)
       if (typeof window !== "undefined") {
         window.localStorage.setItem(key, JSON.stringify(storedValue));
       }

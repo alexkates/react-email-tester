@@ -9,14 +9,8 @@ import {
 } from "react";
 import { compileEmail } from "@/server/compile-email";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import * as React from "react";
-
-type CompiledEmail = {
-  fileName: string;
-  html: string;
-};
-
-type ViewportMode = "desktop" | "mobile";
+import { CompiledEmail } from "@/types/compiled-email";
+import { ViewportMode } from "@/types/viewport-mode";
 
 type EditorContextValue = {
   activeFile: string | null;
@@ -37,8 +31,6 @@ type EditorContextValue = {
   viewportMode: ViewportMode;
 };
 
-const DEFAULT_FILES: Record<string, string> = {};
-
 const EditorContext = createContext<EditorContextValue | undefined>(undefined);
 
 export const useEditor = () => {
@@ -54,7 +46,7 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
   const [activeTab, setActiveTab] = useState("code");
   const [files, setFiles] = useLocalStorage<Record<string, string>>(
     "react-email-preview-files",
-    DEFAULT_FILES
+    {}
   );
   const [activeFile, setActiveFile] = useState<string | null>(null);
   const [compiledEmails, setCompiledEmails] = useState<CompiledEmail[]>([]);
@@ -154,22 +146,22 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
   return (
     <EditorContext.Provider
       value={{
-        mounted,
-        activeTab,
-        setActiveTab,
-        files,
         activeFile,
-        setActiveFile,
-        isCompiling,
-        compiledEmails,
         activePreview,
-        setActivePreview,
-        compile,
+        activeTab,
         addFile,
-        updateFile,
+        compile,
+        compiledEmails,
         deleteFile,
-        viewportMode,
+        files,
+        isCompiling,
+        mounted,
+        setActiveFile,
+        setActivePreview,
+        setActiveTab,
         setViewportMode,
+        updateFile,
+        viewportMode,
       }}
     >
       {children}
