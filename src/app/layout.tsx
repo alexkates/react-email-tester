@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 const title = "React Email Preview";
 const description =
   "Create and test React Email templates using an interactive editor with live preview.";
-const url = "https://react-email-preview.app";
+const url = "https://react-email-tester.app";
 const images = ["/opengraph-image.png"];
 const keywords = [
   "react",
