@@ -11,7 +11,6 @@ import { compileEmail } from "@/server/compile-email";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { CompiledEmail } from "@/types/compiled-email";
 import { ViewportMode } from "@/types/viewport-mode";
-import { useSandpack } from "@codesandbox/sandpack-react";
 
 type EditorContextValue = {
   activeFile: string | null;
