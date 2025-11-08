@@ -6,12 +6,17 @@ import { EditorProvider, useEditor } from "@/contexts/editor-context";
 import { useTheme } from "next-themes";
 
 function HomeContent() {
-  const { theme } = useTheme();
-  const { files } = useEditor();
+  const { theme, resolvedTheme } = useTheme();
+  const { files, mounted } = useEditor();
+
+  if (!mounted) return null;
+
+  const sandpackTheme =
+    theme === "dark" || resolvedTheme === "dark" ? "dark" : "light";
 
   return (
     <SandboxProvider
-      theme={theme === "dark" ? "dark" : "light"}
+      theme={sandpackTheme}
       files={files}
       options={{
         activeFile: Object.keys(files)[0] || "",
