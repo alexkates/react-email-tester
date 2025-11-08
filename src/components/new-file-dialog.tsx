@@ -17,7 +17,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEditor } from "@/contexts/editor-context";
 
-export function NewFileDialog({ variant = "icon" }: { variant?: "icon" | "button" }) {
+export function NewFileDialog({
+  variant = "icon",
+}: {
+  variant?: "icon" | "button";
+}) {
   const { sandpack } = useSandpack();
   const { addFile } = useEditor();
   const [open, setOpen] = useState(false);

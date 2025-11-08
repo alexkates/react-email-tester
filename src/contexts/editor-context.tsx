@@ -70,7 +70,10 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const fileKeys = Object.keys(files);
-    if (fileKeys.length > 0 && (!activeFile || !fileKeys.includes(activeFile))) {
+    if (
+      fileKeys.length > 0 &&
+      (!activeFile || !fileKeys.includes(activeFile))
+    ) {
       setActiveFile(fileKeys[0]);
     } else if (fileKeys.length === 0) {
       setActiveFile("");
