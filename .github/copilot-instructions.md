@@ -2,19 +2,69 @@
 
 ## Project Overview
 
-Next.js 16 application with React 19 for email testing functionality. Uses App Router architecture with server/client component patterns.
+A modern browser-based email template editor and previewer built with Next.js 16 and React 19. Enables developers to write React email components using `@react-email/components` with live preview, multi-file support, and responsive viewport testing. Uses App Router architecture with server/client component patterns.
 
 ## Tech Stack & Key Dependencies
 
-- **Framework**: Next.js 16.0.0 (App Router) + React 19.2.0
-- **Styling**: Tailwind CSS v4 with PostCSS (`@tailwindcss/postcss`)
+### Core Framework
+
+- **Framework**: Next.js 16.0.1 (App Router) + React 19.2.0
+- **Language**: TypeScript 5.9.3 (strict mode)
+- **Runtime**: Bun (primary package manager)
+
+### Email Functionality
+
+- **Email Components**: `@react-email/components` 1.0.0 + `@react-email/render` 2.0.0
+- **Code Editor**: `@codesandbox/sandpack-react` 2.20.0
+- **Bundler**: `esbuild` 0.25.12 (for runtime email compilation)
+
+### Styling & UI
+
+- **CSS Framework**: Tailwind CSS v4 with PostCSS (`@tailwindcss/postcss` 4.1.17)
 - **UI Components**: shadcn/ui (New York style) + Radix UI primitives
-- **Theming**: `next-themes` with light/dark/system modes
-- **Icons**: `lucide-react`
-- **Forms**: `react-hook-form` + `zod` + `@hookform/resolvers`
-- **Package Manager**: Bun (see `bun.lock`)
+- **Theming**: `next-themes` 0.4.6 (light/dark/system modes)
+- **Icons**: `lucide-react` 0.553.0
+- **Utilities**: `class-variance-authority`, `clsx`, `tailwind-merge`
+
+### Forms & Validation
+
+- **Forms**: `react-hook-form` 7.66.0
+- **Validation**: `zod` 4.1.12 + `@hookform/resolvers` 5.2.2
+
+### Code Quality
+
+- **Formatter**: Prettier 3.6.2 + `prettier-plugin-tailwindcss` 0.7.1
 
 ## Architecture & Project Structure
+
+### Directory Layout
+
+```
+src/
+├── app/                    # Next.js App Router (server components by default)
+│   ├── layout.tsx         # Root layout with theme provider
+│   ├── page.tsx           # Home page (client component with SandboxProvider)
+│   └── globals.css        # Tailwind v4 theme configuration
+├── components/            # Feature components
+│   ├── editor.tsx         # Main editor interface with resizable panels
+│   ├── email-preview.tsx  # Compiled email HTML/text preview
+│   ├── file-explorer.tsx  # File management sidebar
+│   ├── compile-button.tsx # Email compilation trigger
+│   └── ui/               # shadcn/ui components (all client components)
+├── contexts/             # React Context providers
+│   ├── editor-context.tsx # Editor state (files, compilation, viewport)
+│   └── theme-context.tsx  # Theme switching logic
+├── hooks/                # Custom React hooks
+│   └── use-mobile.ts     # Mobile detection utility
+├── lib/                  # Utility functions
+│   ├── utils.ts          # cn() utility for className merging
+│   └── default-email.ts  # Initial welcome email template
+├── server/               # Server-side logic
+│   └── compile-email.ts  # esbuild-based email compilation
+└── types/                # TypeScript type definitions
+    ├── compiled-email.ts # Email compilation result types
+    └── viewport-mode.ts  # Viewport mode union type
+```
 
 ### Path Aliases (tsconfig.json)
 
@@ -23,16 +73,20 @@ Always use `@/` prefix for imports:
 ```typescript
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useTheme } from "@/components/theme-provider";
+import { useEditor } from "@/contexts/editor-context";
+import { compileEmail } from "@/server/compile-email";
 ```
 
 ### Component Organization
 
 - **`src/app/`**: Next.js App Router pages (server components by default)
 - **`src/components/ui/`**: shadcn/ui components (all client components)
-- **`src/components/`**: Custom shared components (mix of server/client)
-- **`src/lib/`**: Utility functions and shared logic
-- **`src/hooks/`**: React hooks
+- **`src/components/`**: Custom feature components (mix of server/client)
+- **`src/contexts/`**: React Context providers (client components with `"use client"`)
+- **`src/lib/`**: Utility functions and shared logic (pure functions)
+- **`src/hooks/`**: Custom React hooks (client-side only)
+- **`src/server/`**: Server-side compilation and data processing
+- **`src/types/`**: TypeScript type definitions and interfaces
 
 ## Styling Conventions
 
