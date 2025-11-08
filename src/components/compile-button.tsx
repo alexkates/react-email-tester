@@ -7,24 +7,10 @@ import { cn } from "@/lib/utils";
 import { useSandpack } from "@codesandbox/sandpack-react";
 
 export function CompileButton() {
-  const { isCompiling, compile, updateFile } = useEditor();
+  const { isCompiling, compile } = useEditor();
   const { sandpack } = useSandpack();
 
   const handleCompile = () => {
-    // Sync Sandpack changes back to EditorContext (and localStorage)
-    Object.keys(sandpack.files).forEach((filePath) => {
-      if (
-        (filePath.endsWith(".jsx") || filePath.endsWith(".tsx")) &&
-        !filePath.includes("node_modules")
-      ) {
-        const content = sandpack.files[filePath]?.code;
-        if (content) {
-          updateFile(filePath, content);
-        }
-      }
-    });
-
-    // Compile with current Sandpack files
     compile(sandpack.files);
   };
 

@@ -11,6 +11,7 @@ import { compileEmail } from "@/server/compile-email";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { CompiledEmail } from "@/types/compiled-email";
 import { ViewportMode } from "@/types/viewport-mode";
+import { useSandpack } from "@codesandbox/sandpack-react";
 
 type EditorContextValue = {
   activeFile: string | null;
@@ -27,7 +28,6 @@ type EditorContextValue = {
   setActivePreview: (fileName: string) => void;
   setActiveTab: (tab: string) => void;
   setViewportMode: (mode: ViewportMode) => void;
-  updateFile: (filePath: string, content: string) => void;
   viewportMode: ViewportMode;
 };
 
@@ -55,16 +55,12 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
   const [viewportMode, setViewportMode] = useState<ViewportMode>("desktop");
 
   useEffect(() => setMounted(true), []);
-
   useEffect(() => {
     const fileKeys = Object.keys(files);
-    if (
-      fileKeys.length > 0 &&
-      (!activeFile || !fileKeys.includes(activeFile))
-    ) {
+    if (fileKeys.length === 0) {
+      setActiveFile(null);
+    } else if (!activeFile || !fileKeys.includes(activeFile)) {
       setActiveFile(fileKeys[0]);
-    } else if (fileKeys.length === 0) {
-      setActiveFile("");
     }
   }, [files, activeFile]);
 
@@ -76,16 +72,6 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
       }));
       setActiveFile(filePath);
       setActiveTab("code");
-    },
-    [setFiles]
-  );
-
-  const updateFile = useCallback(
-    (filePath: string, content: string) => {
-      setFiles((prev) => ({
-        ...prev,
-        [filePath]: content,
-      }));
     },
     [setFiles]
   );
@@ -160,7 +146,6 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
         setActivePreview,
         setActiveTab,
         setViewportMode,
-        updateFile,
         viewportMode,
       }}
     >

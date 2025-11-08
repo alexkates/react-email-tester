@@ -11,13 +11,8 @@ function HomeContent() {
 
   if (!mounted) return null;
 
-  const hasFiles = Object.keys(files).length > 0;
   const sandpackTheme =
     theme === "dark" || resolvedTheme === "dark" ? "dark" : "light";
-
-  if (!hasFiles) {
-    return <Editor />;
-  }
 
   return (
     <SandboxProvider

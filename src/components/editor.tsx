@@ -16,63 +16,16 @@ import {
 import { CodeIcon, AppWindowIcon } from "lucide-react";
 import { EmailPreview } from "@/components/email-preview";
 import { useEditor } from "@/contexts/editor-context";
-import { useSandpack } from "@codesandbox/sandpack-react";
 import { CompileButton } from "@/components/compile-button";
 import { ViewportToggle } from "@/components/viewport-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { FileExplorer } from "@/components/file-explorer";
 import { EmptyState } from "@/components/empty-state";
-import { useEffect, useRef } from "react";
 
 export function Editor() {
-  const { activeTab, setActiveTab, activeFile, files, updateFile } =
-    useEditor();
-
-  let sandpack;
-  try {
-    sandpack = useSandpack().sandpack;
-  } catch {
-    sandpack = null;
-  }
+  const { activeTab, setActiveTab, files } = useEditor();
 
   const hasFiles = Object.keys(files).length > 0;
-  const prevFilesRef = useRef<Record<string, string>>({});
-
-  // Sync EditorContext files TO Sandpack (only for added/removed files, not content changes)
-  useEffect(() => {
-    if (!sandpack || !hasFiles) return;
-
-    const prevFiles = prevFilesRef.current;
-    const currentFilePaths = Object.keys(files);
-    const prevFilePaths = Object.keys(prevFiles);
-
-    // Add new files or update files that were just added to EditorContext
-    currentFilePaths.forEach((filePath) => {
-      if (!prevFiles[filePath]) {
-        // New file - sync it to Sandpack
-        sandpack.updateFile(filePath, files[filePath]);
-      }
-    });
-
-    // Delete removed files from Sandpack
-    prevFilePaths.forEach((filePath) => {
-      if (
-        !files[filePath] &&
-        (filePath.endsWith(".jsx") || filePath.endsWith(".tsx"))
-      ) {
-        sandpack.deleteFile(filePath);
-      }
-    });
-
-    prevFilesRef.current = files;
-  }, [files, sandpack, hasFiles]);
-
-  // Sync active file to Sandpack
-  useEffect(() => {
-    if (sandpack && activeFile && sandpack.activeFile !== activeFile) {
-      sandpack.openFile(activeFile);
-    }
-  }, [activeFile, sandpack]);
 
   if (!hasFiles) {
     return (
