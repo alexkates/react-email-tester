@@ -105,7 +105,7 @@ Email templates are compiled server-side using `esbuild`:
 
 1. User code is bundled with esbuild
 2. React components are rendered to HTML via `@react-email/render`
-3. Sandboxed execution prevents arbitrary code execution
+3. Renders in an iframe to simulate an isolated email client
 
 ## Scripts
 
